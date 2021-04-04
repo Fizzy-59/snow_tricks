@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=VideoRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class Video
 {
@@ -26,6 +27,16 @@ class Video
      * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="videos")
      */
     private $trick;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $updatedAt;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $creadtedAt;
 
     public function getId(): ?int
     {
@@ -54,5 +65,32 @@ class Video
         $this->trick = $trick;
 
         return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function setUpdatedAt(): void
+    {
+        $this->updatedAt =  $this->createdAt = new \DateTimeImmutable();
+    }
+
+    public function getCreadtedAt(): ?\DateTimeInterface
+    {
+        return $this->creadtedAt;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCreatedAt(): void
+    {
+        $this->createdAt =  $this->createdAt = new \DateTimeImmutable();
     }
 }

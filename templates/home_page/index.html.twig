@@ -22,9 +22,10 @@
             {% for trick in tricks %}
                 <div class="col-sm">
                     <div class="card" style="width: 18rem;">
-                        <img src="{{ trick.image }}" class="card-img-top" alt="Image of Trick">
+                        <img src="{{ trick.images[0].path }}" class="card-img-top" alt="Image of Trick">
                         <div class="card-body">
-                            <p class="card-text">{{ trick.name }}</p>
+                            <a href="{{ path('figure', {'id': trick.id }) }}"><p class="card-text">{{ trick.name }}</p></a>
+
                         </div> {# card-body #}
                     </div> {# card #}
                 </div>  {# col #}

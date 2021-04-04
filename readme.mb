@@ -2,3 +2,13 @@ php bin/console make:entity
 php bin/console make:
 php bin/console doctrine:migrations:migrate
 composer dump-autoload
+
+
+php bin/console doctrine:database:drop --force
+php bin/console doctrine:database:create
+php bin/console doctrine:schema:update --force
+
+
+address mail:
+contact@snowtricks.devillezdeveloppement.info
+il[ZPkz3@!od
