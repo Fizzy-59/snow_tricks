@@ -30,14 +30,13 @@ class Category
     private $tricks;
 
     /**
-     * @ORM\OneToMany(targetEntity=User::class, mappedBy="category")
+     * @ORM\Column(type="datetime")
      */
-    private $users;
+    private $createdAt;
 
     public function __construct()
     {
         $this->tricks = new ArrayCollection();
-        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -87,32 +86,14 @@ class Category
         return $this;
     }
 
-    /**
-     * @return Collection|User[]
-     */
-    public function getUsers(): Collection
+    public function getCreatedAt(): ?\DateTimeInterface
     {
-        return $this->users;
+        return $this->createdAt;
     }
 
-    public function addUser(User $user): self
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
-        if (!$this->users->contains($user)) {
-            $this->users[] = $user;
-            $user->setCategory($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUser(User $user): self
-    {
-        if ($this->users->removeElement($user)) {
-            // set the owning side to null (unless already changed)
-            if ($user->getCategory() === $this) {
-                $user->setCategory(null);
-            }
-        }
+        $this->createdAt = $createdAt;
 
         return $this;
     }

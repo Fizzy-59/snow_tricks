@@ -1,0 +1,32 @@
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <ul class="list-inline text-center">
+                    <li class="list-inline-item">
+                        <a href="https://linkedin.com/in/romain-devillez" target="_blank">
+                            <span class="fa-stack fa-lg">
+                              <i class="fas fa-circle fa-stack-2x"></i>
+                              <i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="https://github.com/Fizzy-59" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                </span>
+                        </a>
+                        {# Session admin #}{#
+                        {% if session.user.role ==  'ROLE_ADMIN' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/dashboard"> |- Tableau de bord -|</a>
+                    </li>
+                    {% endif %}#}
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; devillezdeveloppement 2021</p>
+            </div>
+        </div>
+    </div>
+</footer>

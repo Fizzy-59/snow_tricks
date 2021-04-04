@@ -28,14 +28,14 @@ class Comment
     private $createdAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="comments")
-     */
-    private $users;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="comments")
      */
     private $trick;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="comments")
+     */
+    private $user;
 
     public function getId(): ?int
     {
@@ -66,17 +66,6 @@ class Comment
         return $this;
     }
 
-    public function getUsers(): ?User
-    {
-        return $this->users;
-    }
-
-    public function setUsers(?User $users): self
-    {
-        $this->users = $users;
-
-        return $this;
-    }
 
     public function getTrick(): ?Trick
     {
@@ -86,6 +75,18 @@ class Comment
     public function setTrick(?Trick $trick): self
     {
         $this->trick = $trick;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

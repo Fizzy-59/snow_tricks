@@ -6,12 +6,14 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @ORM\Table(name="`user`")
+ * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  */
-class User
+class User implements UserInterface
 {
     /**
      * @ORM\Id
@@ -21,72 +23,40 @@ class User
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=100)
-     */
-    private $username;
-
-    /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=180, unique=true)
      */
     private $email;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="json")
+     */
+    private $roles = [];
+
+    /**
+     * @var string The hashed password
+     * @ORM\Column(type="string")
      */
     private $password;
 
     /**
-     * @ORM\Column(type="datetime")
-     */
-    private $createdAt;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Trick::class, mappedBy="users")
+     * @ORM\OneToMany(targetEntity=Trick::class, mappedBy="user")
      */
     private $tricks;
 
     /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="users")
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="user")
      */
     private $comments;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $token;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="users")
-     */
-    private $videos;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="users")
-     */
-    private $category;
 
     public function __construct()
     {
         $this->tricks = new ArrayCollection();
         $this->comments = new ArrayCollection();
-        $this->videos = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getUsername(): ?string
-    {
-        return $this->username;
-    }
-
-    public function setUsername(string $username): self
-    {
-        $this->username = $username;
-
-        return $this;
     }
 
     public function getEmail(): ?string
@@ -101,9 +71,41 @@ class User
         return $this;
     }
 
-    public function getPassword(): ?string
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUsername(): string
     {
-        return $this->password;
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getPassword(): string
+    {
+        return (string) $this->password;
     }
 
     public function setPassword(string $password): self
@@ -113,16 +115,24 @@ class User
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    /**
+     * Returning a salt is only needed, if you are not using a modern
+     * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
+     *
+     * @see UserInterface
+     */
+    public function getSalt(): ?string
     {
-        return $this->createdAt;
+        return null;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
     {
-        $this->createdAt = $createdAt;
-
-        return $this;
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
 
     /**
@@ -137,7 +147,7 @@ class User
     {
         if (!$this->tricks->contains($trick)) {
             $this->tricks[] = $trick;
-            $trick->setUsers($this);
+            $trick->setUser($this);
         }
 
         return $this;
@@ -147,8 +157,8 @@ class User
     {
         if ($this->tricks->removeElement($trick)) {
             // set the owning side to null (unless already changed)
-            if ($trick->getUsers() === $this) {
-                $trick->setUsers(null);
+            if ($trick->getUser() === $this) {
+                $trick->setUser(null);
             }
         }
 
@@ -167,7 +177,7 @@ class User
     {
         if (!$this->comments->contains($comment)) {
             $this->comments[] = $comment;
-            $comment->setUsers($this);
+            $comment->setUser($this);
         }
 
         return $this;
@@ -177,64 +187,10 @@ class User
     {
         if ($this->comments->removeElement($comment)) {
             // set the owning side to null (unless already changed)
-            if ($comment->getUsers() === $this) {
-                $comment->setUsers(null);
+            if ($comment->getUser() === $this) {
+                $comment->setUser(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getToken(): ?string
-    {
-        return $this->token;
-    }
-
-    public function setToken(?string $token): self
-    {
-        $this->token = $token;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Video[]
-     */
-    public function getVideos(): Collection
-    {
-        return $this->videos;
-    }
-
-    public function addVideo(Video $video): self
-    {
-        if (!$this->videos->contains($video)) {
-            $this->videos[] = $video;
-            $video->setUsers($this);
-        }
-
-        return $this;
-    }
-
-    public function removeVideo(Video $video): self
-    {
-        if ($this->videos->removeElement($video)) {
-            // set the owning side to null (unless already changed)
-            if ($video->getUsers() === $this) {
-                $video->setUsers(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getCategory(): ?Category
-    {
-        return $this->category;
-    }
-
-    public function setCategory(?Category $category): self
-    {
-        $this->category = $category;
 
         return $this;
     }

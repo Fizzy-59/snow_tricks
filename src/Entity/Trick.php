@@ -40,16 +40,6 @@ class Trick
     private $updatedAt;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $slug;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="tricks")
-     */
-    private $users;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="tricks")
      */
     private $category;
@@ -68,6 +58,16 @@ class Trick
      * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trick")
      */
     private $videos;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $image;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="tricks")
+     */
+    private $user;
 
     public function __construct()
     {
@@ -125,30 +125,6 @@ class Trick
     public function setUpdatedAt(\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    public function getSlug(): ?string
-    {
-        return $this->slug;
-    }
-
-    public function setSlug(string $slug): self
-    {
-        $this->slug = $slug;
-
-        return $this;
-    }
-
-    public function getUsers(): ?User
-    {
-        return $this->users;
-    }
-
-    public function setUsers(?User $users): self
-    {
-        $this->users = $users;
 
         return $this;
     }
@@ -251,6 +227,30 @@ class Trick
                 $video->setTrick(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

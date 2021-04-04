@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomePageController!{% endblock %}
+
+{% block body %}
+
+
+    <header style="background-image: url('https://via.placeholder.com/700')">
+        <div class="contents-header text-center">
+            <h1 class="header-title text-center">SnowTricks</h1>
+            <div style="margin-bottom: 3rem;" class="text-center">
+            </div>
+            <div class="sub-title">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Provident dolor numquam ad ipsam corrupti impedit libero illum eius distinctio earum porro explicabo qui culpa, necessitatibus minus dolore tenetur beatae ratione!
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="row">
+
+            {% for trick in tricks %}
+                <div class="col-sm">
+                    <div class="card" style="width: 18rem;">
+                        <img src="{{ trick.image }}" class="card-img-top" alt="Image of Trick">
+                        <div class="card-body">
+                            <p class="card-text">{{ trick.name }}</p>
+                        </div> {# card-body #}
+                    </div> {# card #}
+                </div>  {# col #}
+            {% endfor %}
+
+        </div> {# row #}
+    </div> {# container #}
+
+{% endblock %}

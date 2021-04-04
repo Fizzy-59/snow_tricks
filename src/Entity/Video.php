@@ -23,11 +23,6 @@ class Video
     private $url;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="videos")
-     */
-    private $users;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="videos")
      */
     private $trick;
@@ -45,18 +40,6 @@ class Video
     public function setUrl(string $url): self
     {
         $this->url = $url;
-
-        return $this;
-    }
-
-    public function getUsers(): ?User
-    {
-        return $this->users;
-    }
-
-    public function setUsers(?User $users): self
-    {
-        $this->users = $users;
 
         return $this;
     }
