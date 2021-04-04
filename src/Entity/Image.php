@@ -38,6 +38,11 @@ class Image
     private $file;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $test;
+
+    /**
      * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="images")
      */
     private $trick;
