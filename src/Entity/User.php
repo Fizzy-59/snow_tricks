@@ -64,6 +64,11 @@ class User implements UserInterface
      */
     private $updatedAt;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isVerified = false;
+
     public function __construct()
     {
         $this->tricks = new ArrayCollection();
@@ -243,5 +248,17 @@ class User implements UserInterface
     public function setUpdatedAt(): void
     {
         $this->updatedAt =  $this->createdAt = new \DateTimeImmutable();
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): self
+    {
+        $this->isVerified = $isVerified;
+
+        return $this;
     }
 }
