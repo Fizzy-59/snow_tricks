@@ -4,10 +4,16 @@ namespace App\Entity;
 
 use App\Repository\ImageRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ImageRepository::class)
  * @ORM\HasLifecycleCallbacks()
+ * @UniqueEntity(
+ *  fields={"name"},
+ *  message="File Name already use")
  */
 class Image
 {
@@ -25,6 +31,7 @@ class Image
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $caption;
 
@@ -94,12 +101,12 @@ class Image
         return $this;
     }
 
-    public function getFile(): ?string
+    public function getFile()
     {
         return $this->file;
     }
 
-    public function setFile(?string $file): self
+    public function setFile(UploadedFile $file): self
     {
         $this->file = $file;
 

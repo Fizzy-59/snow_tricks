@@ -17,8 +17,8 @@
                 <div class="card" style="width: 18rem;">
                     <div class="card-body">
                         {{ form_start(registrationForm) }}
-                        <p class="card-text">{{ form_row(registrationForm.email) }}</p>
                         <p class="card-text">{{ form_row(registrationForm.username) }}</p>
+                        <p class="card-text">{{ form_row(registrationForm.email) }}</p>
                         <p class="card-text"> {{ form_row(registrationForm.plainPassword, {
                                 label: 'Password'
                             }) }}</p>

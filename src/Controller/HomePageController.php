@@ -17,8 +17,6 @@ class HomePageController extends AbstractController
      */
     public function index(TrickRepository $trickRepository): Response
     {
-        $user = get_current_user();
-
         $tricks = $trickRepository->findAll();
 
         return $this->render('home_page/index.html.twig',

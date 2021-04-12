@@ -6,10 +6,15 @@ use App\Repository\TrickRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=TrickRepository::class)
  * @ORM\HasLifecycleCallbacks()
+ * @UniqueEntity(
+ *  fields={"name"},
+ *  message="A trick already has this name")
  */
 class Trick
 {
@@ -22,11 +27,13 @@ class Trick
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Assert\Length(max=100, maxMessage="The name must not be more than 100 characters")
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\Length(min=20, minMessage="Description must be at least 20 characters long")
      */
     private $description;
 
@@ -46,17 +53,17 @@ class Trick
     private $category;
 
     /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="trick")
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="trick", orphanRemoval=true)
      */
     private $comments;
 
     /**
-     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="trick")
+     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="trick", orphanRemoval=true, cascade={"persist", "remove"})
      */
     private $images;
 
     /**
-     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trick")
+     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trick", orphanRemoval=true, cascade={"persist", "remove"})
      */
     private $videos;
 
