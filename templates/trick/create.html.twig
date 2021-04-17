@@ -55,6 +55,7 @@
 
     {{ form_row(form.name) }}
     {{ form_row(form.description) }}
+    {{ form_row(form.mainImage) }}
 
     <h3>Images</h3>
     <ul class="images" data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}"></ul>

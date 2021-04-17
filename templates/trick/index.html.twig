@@ -41,10 +41,22 @@
         </div> {# row #}
 
         <div class="row">
+            <div class="col-sm">
+                <div class="card" style="width: 18rem;">
+                    <img src="{{ asset(trick.mainImage.pathThumbnail ~ '/' ~ trick.mainImage.name) }}"
+                         class="card-img-top" alt="{{ trick.mainImage.caption }}">
+                    <div class="card-body">
+                    </div> {# card-body #}
+                </div> {# col #}
+            </div> {# card #}
+        </div> {# row #}
+
+        <div class="row">
             {% for image in trick.images %}
                 <div class="col-sm">
                     <div class="card" style="width: 18rem;">
-                        <img src="{{ image.path }}" class="card-img-top" alt="Image of Trick">
+                        <img src="{{ image.pathThumbnail ~ '/' ~ image.name }}" class="card-img-top"
+                             alt="Image of Trick">
                         <div class="card-body">
                             <p>{{ image.name }}</p>
                         </div> {# card-body #}
@@ -58,8 +70,8 @@
                 <p>{{ trick.category.name }}</p>
                 <p>{{ trick.createdAt|date('d-m-Y à H:i') }}</p>
 
-                {% if trick.createdAt != trick.updatedAt  %}
-                <p>{{ trick.updatedAt|date('d-m-Y à H:i') }}</p>
+                {% if trick.createdAt != trick.updatedAt %}
+                    <p>{{ trick.updatedAt|date('d-m-Y à H:i') }}</p>
                 {% endif %}
             </div> {# col #}
         </div> {# row #}
@@ -77,11 +89,11 @@
             </div>
 
             {# Errors #}{#
-            {% for error in errors %}
-                <div class="alert alert-danger" role="alert">
-                    {{ error }}
-                </div>
-            {% endfor %}#}
+        {% for error in errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+        {% endfor %} #}
 
             {# Form  add comment #}
             <div class="row">

@@ -151,4 +151,14 @@ class Image
     {
         $this->updatedAt =  $this->createdAt = new \DateTimeImmutable();
     }
+
+    public function getPathCropped(): ?string
+    {
+        return $this->path . '/cropped';
+    }
+
+    public function getPathThumbnail(): ?string
+    {
+        return $this->path . '/thumbnail';
+    }
 }

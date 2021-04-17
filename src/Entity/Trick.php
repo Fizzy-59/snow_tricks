@@ -72,6 +72,12 @@ class Trick
      */
     private $user;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Image::class, cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $mainImage;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -248,4 +254,17 @@ class Trick
 
         return $this;
     }
+
+    public function getMainImage(): ?Image
+    {
+        return $this->mainImage;
+    }
+
+    public function setMainImage(Image $mainImage): self
+    {
+        $this->mainImage = $mainImage;
+
+        return $this;
+    }
+
 }

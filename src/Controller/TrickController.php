@@ -8,6 +8,8 @@ use App\Form\CreateTrickType;
 
 
 use App\Repository\TrickRepository;
+use App\Service\Cropper;
+use App\Service\Thumbnail;
 use App\Service\UploadImage;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,7 +34,7 @@ class TrickController extends AbstractController
         $trickId = $request->query->get('id');
         $trick = $trickRepository->findOneBy(['id' => $trickId]);
 
-        return $this->render('figure/index.html.twig', [
+        return $this->render('trick/index.html.twig', [
             'controller_name' => 'TrickController',
             'trick' => $trick
         ]);
@@ -79,7 +81,7 @@ class TrickController extends AbstractController
      *
      * @return RedirectResponse|Response
      */
-    public function new(Request $request, EntityManagerInterface $entityManager, UploadImage $uploadImage)
+    public function new(Request $request, EntityManagerInterface $entityManager, UploadImage $uploadImage, Cropper $cropper, Thumbnail $thumbnail)
     {
         $user = $this->getUser();
 
@@ -93,12 +95,24 @@ class TrickController extends AbstractController
             $trick->setDescription($form->get('description')->getData());
             $trick->setUser($user);
 
+            $mainImage = $trick->getMainImage();
+            $mainImage->setTrick($trick);
+            $mainImage = $uploadImage->saveImage($mainImage);
+
+            $entityManager->persist($mainImage);
+
+            $cropper->crop($mainImage);
+            $thumbnail->resize($mainImage);
+
             foreach ($trick->getImages() as $image) {
                 $image->setTrick($trick);
                 $image->setCaption($image->getCaption());
                 $image = $uploadImage->saveImage($image);
 
                 $entityManager->persist($image);
+
+                $cropper->crop($image);
+                $thumbnail->resize($image);
             }
 
             foreach ($trick->getVideos() as $video) {
@@ -109,6 +123,11 @@ class TrickController extends AbstractController
 
             $entityManager->persist($trick);
             $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                'The trick <strong>' . $trick->getName() . '</strong> successfully saved'
+            );
 
             return $this->redirectToRoute('home');
         }

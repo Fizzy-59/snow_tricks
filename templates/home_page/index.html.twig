@@ -23,7 +23,7 @@
                 <div class="col-sm">
                     <div class="card" style="width: 18rem;">
                         {% for image in trick.images %}
-                        <img src="{{  }}" class="card-img-top" alt="Image of Trick">
+                        <img src="{{ asset(trick.mainImage.pathThumbnail ~ '/' ~ trick.mainImage.name) }}" class="card-img-top" alt="{{ trick.mainImage.caption }}">
                         {% endfor %}
                         <div class="card-body">
                             <a href="{{ path('trick', {'id': trick.id }) }}"><p class="card-text">{{ trick.name }}</p></a>
