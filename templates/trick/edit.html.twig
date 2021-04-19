@@ -8,9 +8,30 @@
         <h1>Modifier le trick : {{ trick.name }}</h1>
         {{ form_start(form) }}
 
-        {{ form_row(form.name) }}
-        {{ form_row(form.description) }}
-        {{ form_row(form.category) }}
+        <div class="my-custom-class-for-errors">
+            {{ form_errors(form) }}
+        </div>
+
+        <div class="row">
+            <div class="col">
+                {{ form_label(form.name) }}
+                {{ form_widget(form.name) }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                {{ form_label(form.description) }}
+                {{ form_widget(form.description) }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                {{ form_label(form.category) }}
+                {{ form_widget(form.category) }}
+            </div>
+        </div>
 
         <div class="form-group">
             {{ form_label(form.mainImage) }}
@@ -24,6 +45,7 @@
                         <button class="favorite styled" type="button">Delete</button>
                     </a>
                 </div>
+                <br/>
                 <div class="col-sm-6">
                     {{ form_errors(form.mainImage.caption) }}
                     {{ form_widget(form.mainImage.caption) }}
@@ -33,10 +55,12 @@
         </div>
 
         <h3>Images</h3>
-        {{ form_row(form.images) }}
+        {{ form_label(form.images) }}
+        {{ form_widget(form.images) }}
 
         <h3>Video</h3>
-        {{ form_row(form.videos) }}
+        {{ form_label(form.videos) }}
+        {{ form_widget(form.videos) }}
 
         <button type="submit" class="btn btn-success btn-lg col-12"><i class="fas fa-check"></i> UPDATE TRICK</button>
 
