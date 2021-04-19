@@ -66,6 +66,22 @@
         </div> {# row #}
 
         <div class="row">
+            {% for video in trick.videos %}
+                <div class="col-sm">
+                    <div class="card" style="width: 18rem;">
+                        <iframe width="560" height="315" src=" {{ video.url }} "
+                                title="YouTube video player" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen>
+                        </iframe>
+                        <div class="card-body">
+                        </div> {# card-body #}
+                    </div> {# col #}
+                </div> {# card #}
+            {% endfor %}
+        </div> {# row #}
+
+        <div class="row">
             <div class="col">
                 <p>{{ trick.category.name }}</p>
                 <p>{{ trick.createdAt|date('d-m-Y à H:i') }}</p>
@@ -86,7 +102,7 @@
                             Ajouter un commentaire </a>
                     </p>
                 </div>
-            </div>
+            </div> {# row #}
 
             {# Errors #}{#
         {% for error in errors %}

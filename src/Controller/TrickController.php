@@ -3,21 +3,21 @@
 namespace App\Controller;
 
 use App\Entity\Comment;
+use App\Entity\Image;
 use App\Entity\Trick;
-use App\Form\CreateTrickType;
-
-
+use App\Form\TrickType;
 use App\Repository\TrickRepository;
 use App\Service\Cropper;
 use App\Service\Thumbnail;
 use App\Service\UploadImage;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 class TrickController extends AbstractController
 {
@@ -86,7 +86,7 @@ class TrickController extends AbstractController
         $user = $this->getUser();
 
         $trick = new Trick();
-        $form = $this->createForm(CreateTrickType::class, $trick);
+        $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
@@ -134,6 +134,50 @@ class TrickController extends AbstractController
 
         return $this->render('trick/create.html.twig', [
             'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/trick/edit", name="trick_edit")
+     *
+     */
+    public function edit(Request $request, TrickRepository $trickRepository, EntityManagerInterface $entityManager)
+    {
+
+        $trickId = $request->query->get('id');
+        $trick = $trickRepository->findOneBy(['id' => $trickId]);
+
+        $form = $this->createForm(TrickType::class, $trick);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            foreach($trick->getImages() as $image) {
+                $image->setTrick($trick);
+                $entityManager->persist($image);
+            }
+
+            foreach ($trick->getVideos() as $video) {
+                $video->setUrl($video->getUrl());
+
+                $entityManager->persist($video);
+            }
+
+            $entityManager->persist($trick);
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                'The trick <strong>' . $trick->getName() . '</strong> as been updated'
+            );
+
+            return $this->redirectToRoute('home', [
+            ]);
+        }
+
+        return $this->render('trick/edit.html.twig', [
+            'form' => $form->createView(),
+            'trick' => $trick
         ]);
     }
 }
