@@ -4,10 +4,7 @@ namespace App\Controller;
 
 use App\Form\ImageType;
 use App\Repository\ImageRepository;
-use App\Service\Cropper;
-use App\Service\DeleteImage;
-use App\Service\Thumbnail;
-use App\Service\UploadImage;
+use App\Service\ImageManager;
 use Doctrine\ORM\EntityManagerInterface;
 use http\Exception\BadMessageException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,7 +18,7 @@ class ImageController extends AbstractController
      * @Route("/image/edit", name="image_edit")
      */
     public function edit(Request $request, ImageRepository $imageRepository, EntityManagerInterface $entityManager,
-                         UploadImage $uploadImage, Cropper $cropper, Thumbnail $thumbnail): Response
+                         ImageManager $imageManager): Response
     {
         $imageId = $request->query->get('id');
         $image = $imageRepository->findOneBy(['id' => $imageId]);
@@ -33,10 +30,10 @@ class ImageController extends AbstractController
         {
             $image = $form->getData();
 
-            $imageFile = $uploadImage->saveImage($image);
+            $imageFile = $imageManager->saveImage($image);
 
-            $cropper->crop($imageFile);
-            $thumbnail->resize($imageFile);
+            $imageManager->crop($imageFile);
+            $imageManager->resize($imageFile);
 
             $entityManager->persist($image);
             $entityManager->flush();
@@ -51,7 +48,7 @@ class ImageController extends AbstractController
      * @Route("/main-image/edit", name="main_image_edit")
      */
     public function editMainImage(Request $request, ImageRepository $imageRepository, EntityManagerInterface $entityManager,
-                                  UploadImage $uploadImage, Cropper $cropper, Thumbnail $thumbnail): Response
+                                  ImageManager $imageManager): Response
     {
         $imageId = $request->query->get('id');
         $image = $imageRepository->findOneBy(['id' => $imageId]);
@@ -63,10 +60,10 @@ class ImageController extends AbstractController
         {
             $image = $form->getData();
 
-            $imageFile = $uploadImage->saveImage($image);
+            $imageFile = $imageManager->saveImage($image);
 
-            $cropper->crop($imageFile);
-            $thumbnail->resize($imageFile);
+            $imageManager->crop($imageFile);
+            $imageManager->resize($imageFile);
 
             $entityManager->persist($image);
             $entityManager->flush();
@@ -80,7 +77,7 @@ class ImageController extends AbstractController
     /**
      * @Route("/main-image/delete/id", name="main_image_delete")
      */
-    public function deleteMainImage(ImageRepository $imageRepository, Request $request, DeleteImage $deleteImage,
+    public function deleteMainImage(ImageRepository $imageRepository, Request $request, ImageManager $imageManager,
         EntityManagerInterface $entityManager): Response
     {
         $imageId = $request->query->get('id');
@@ -95,9 +92,8 @@ class ImageController extends AbstractController
         }
 
         //TODO : rendre obligatoire la main imagedans le formulaire
-        // TODO: ça supprime la main image mais pas objet et ça n'assigne pas une nouvelle main image
 
-        $deleteImage->deleteImage($image);
+        $imageManager->deleteImage($image);
 
         // We delete the main image, we must assign a new main image
         $trick->setMainImage($trick->getImages()->first());
@@ -112,11 +108,11 @@ class ImageController extends AbstractController
     /**
      * @Route("/image/delete/id", name="image_delete")
      */
-    public function deleteImage(ImageRepository $imageRepository, Request $request, DeleteImage $deleteImage): Response
+    public function deleteImage(ImageRepository $imageRepository, Request $request, ImageManager $imageManager): Response
     {
         $trickId = $request->query->get('id');
         $image = $imageRepository->findOneBy(['id' => $trickId]);
-        $deleteImage->deleteImage($image);
+        $imageManager->deleteImage($image);
 
         $url = $request->headers->get('referer');
         return $this->redirect($url);

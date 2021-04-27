@@ -6,9 +6,7 @@ use App\Entity\Comment;
 use App\Entity\Trick;
 use App\Form\TrickType;
 use App\Repository\TrickRepository;
-use App\Service\Cropper;
-use App\Service\Thumbnail;
-use App\Service\UploadImage;
+use App\Service\ImageManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -60,7 +58,7 @@ class TrickController extends AbstractController
         $entityManager->persist($comment);
         $entityManager->flush();
 
-        return $this->render('figure/index.html.twig', ['controller_name' => 'TrickController', 'trick' => $trick]);
+        return $this->render('trick/index.html.twig', ['controller_name' => 'TrickController', 'trick' => $trick]);
     }
 
     /**
@@ -68,12 +66,10 @@ class TrickController extends AbstractController
      *
      * @param Request $request
      * @param EntityManagerInterface $entityManager
-     * @param UploadImage $uploadImage
      *
      * @return RedirectResponse|Response
      */
-    public function new(Request $request, EntityManagerInterface $entityManager, UploadImage $uploadImage,
-                        Cropper $cropper, Thumbnail $thumbnail)
+    public function new(Request $request, EntityManagerInterface $entityManager, ImageManager $imageManager): Response
     {
         $user = $this->getUser();
 
@@ -89,22 +85,22 @@ class TrickController extends AbstractController
 
             $mainImage = $trick->getMainImage();
             $mainImage->setTrick($trick);
-            $mainImage = $uploadImage->saveImage($mainImage);
+            $mainImage = $imageManager->saveImage($mainImage);
 
             $entityManager->persist($mainImage);
 
-            $cropper->crop($mainImage);
-            $thumbnail->resize($mainImage);
+            $imageManager->crop($mainImage);
+            $imageManager->resize($mainImage);
 
             foreach ($trick->getImages() as $image) {
                 $image->setTrick($trick);
                 $image->setCaption($image->getCaption());
-                $image = $uploadImage->saveImage($image);
+                $image = $imageManager->saveImage($image);
 
                 $entityManager->persist($image);
 
-                $cropper->crop($image);
-                $thumbnail->resize($image);
+                $imageManager->crop($image);
+                $imageManager->resize($image);
             }
 
             foreach ($trick->getVideos() as $video) {
