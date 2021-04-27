@@ -79,6 +79,7 @@ class TrickController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
+            $
             $trick->setName($form->get('name')->getData());
             $trick->setDescription($form->get('description')->getData());
             $trick->setUser($user);
@@ -104,18 +105,13 @@ class TrickController extends AbstractController
             }
 
             foreach ($trick->getVideos() as $video) {
+                $video->setTrick($trick);
                 $video->setUrl($video->getUrl());
-
                 $entityManager->persist($video);
             }
 
             $entityManager->persist($trick);
             $entityManager->flush();
-
-            $this->addFlash(
-                'success',
-                'The trick <strong>' . $trick->getName() . '</strong> successfully saved'
-            );
 
             return $this->redirectToRoute('home');
         }
@@ -148,12 +144,7 @@ class TrickController extends AbstractController
             $entityManager->persist($trick);
             $entityManager->flush();
 
-            $this->addFlash(
-                'success',
-                'The trick <strong>' . $trick->getName() . '</strong> as been updated'
-            );
-
-            return $this->redirectToRoute('home', []);
+            return $this->redirectToRoute('home');
         }
 
         return $this->render('trick/edit.html.twig', ['form' => $form->createView(), 'trick' => $trick]);

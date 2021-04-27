@@ -84,17 +84,14 @@ class ImageController extends AbstractController
         $image = $imageRepository->findOneBy(['id' => $imageId]);
         $trick = $image->getTrick();
         $collectionOfImages = $trick->getImages();
+        // TODO : use object
         $nbOfImages = count($collectionOfImages);
 
+        // TODO: personalize message and redirect
         // If there is one image or less, it is impossible to delete the main image because it cannot be replaced.
-        if($nbOfImages <= 1) {
-            throw new BadMessageException('joe');
-        }
-
-        //TODO : rendre obligatoire la main imagedans le formulaire
+        if($nbOfImages <= 1) throw new BadMessageException('joe');
 
         $imageManager->deleteImage($image);
-
         // We delete the main image, we must assign a new main image
         $trick->setMainImage($trick->getImages()->first());
 
