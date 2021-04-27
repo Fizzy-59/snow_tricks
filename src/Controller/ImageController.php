@@ -2,45 +2,123 @@
 
 namespace App\Controller;
 
-use App\Repository\TrickRepository;
+use App\Form\ImageType;
+use App\Repository\ImageRepository;
+use App\Service\Cropper;
+use App\Service\DeleteImage;
+use App\Service\Thumbnail;
+use App\Service\UploadImage;
 use Doctrine\ORM\EntityManagerInterface;
+use http\Exception\BadMessageException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\BrowserKit\Request;
-use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ImageController extends AbstractController
 {
     /**
-     * @Route("/image/delete", name="image_delete")
+     * @Route("/image/edit", name="image_edit")
      */
-    public function delete(TrickRepository $trickRepository, Request $request, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, ImageRepository $imageRepository, EntityManagerInterface $entityManager,
+                         UploadImage $uploadImage, Cropper $cropper, Thumbnail $thumbnail): Response
     {
         $imageId = $request->query->get('id');
-        $image = $trickRepository->findOneBy(['id' => $imageId]);
+        $image = $imageRepository->findOneBy(['id' => $imageId]);
 
+        $form = $this->createForm(ImageType::class, $image);
+        $form->handleRequest($request);
 
-        $fileSystem = new Filesystem();
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $image = $form->getData();
 
-        // Delete image in folder tricks
-        $fileSystem->remove($image->getPath() . '/' . $image->getName());
+            $imageFile = $uploadImage->saveImage($image);
 
-        // Delete image in folder cropped
-        $fileSystem->remove($image->getPath() . '/cropped/' . $image->getName());
+            $cropper->crop($imageFile);
+            $thumbnail->resize($imageFile);
 
-        // Delete image in folder thumbnail
-        $fileSystem->remove($image->getPath() . '/thumbnail/' . $image->getName());
+            $entityManager->persist($image);
+            $entityManager->flush();
 
-        $entityManager->persist($image);
+            return $this->redirectToRoute('home');
+        }
+
+        return $this->render('image/edit.html.twig', ['form' => $form->createView(), 'image' => $image]);
+    }
+
+    /**
+     * @Route("/main-image/edit", name="main_image_edit")
+     */
+    public function editMainImage(Request $request, ImageRepository $imageRepository, EntityManagerInterface $entityManager,
+                                  UploadImage $uploadImage, Cropper $cropper, Thumbnail $thumbnail): Response
+    {
+        $imageId = $request->query->get('id');
+        $image = $imageRepository->findOneBy(['id' => $imageId]);
+
+        $form = $this->createForm(ImageType::class, $image);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $image = $form->getData();
+
+            $imageFile = $uploadImage->saveImage($image);
+
+            $cropper->crop($imageFile);
+            $thumbnail->resize($imageFile);
+
+            $entityManager->persist($image);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('home');
+        }
+
+        return $this->render('image/main_image_edit.html.twig', ['form' => $form->createView(), 'image' => $image]);
+    }
+
+    /**
+     * @Route("/main-image/delete/id", name="main_image_delete")
+     */
+    public function deleteMainImage(ImageRepository $imageRepository, Request $request, DeleteImage $deleteImage,
+        EntityManagerInterface $entityManager): Response
+    {
+        $imageId = $request->query->get('id');
+        $image = $imageRepository->findOneBy(['id' => $imageId]);
+        $trick = $image->getTrick();
+        $collectionOfImages = $trick->getImages();
+        $nbOfImages = count($collectionOfImages);
+
+        // If there is one image or less, it is impossible to delete the main image because it cannot be replaced.
+        if($nbOfImages <= 1) {
+            throw new BadMessageException('joe');
+        }
+
+        //TODO : rendre obligatoire la main imagedans le formulaire
+        // TODO: ça supprime la main image mais pas objet et ça n'assigne pas une nouvelle main image
+
+        $deleteImage->deleteImage($image);
+
+        // We delete the main image, we must assign a new main image
+        $trick->setMainImage($trick->getImages()->first());
+
+        $entityManager->persist($trick);
         $entityManager->flush();
 
-        $this->addflash('success', "Successfully deleted image");
+        $url = $request->headers->get('referer');
+        return $this->redirect($url);
+    }
 
-        // Return to edit form
+    /**
+     * @Route("/image/delete/id", name="image_delete")
+     */
+    public function deleteImage(ImageRepository $imageRepository, Request $request, DeleteImage $deleteImage): Response
+    {
+        $trickId = $request->query->get('id');
+        $image = $imageRepository->findOneBy(['id' => $trickId]);
+        $deleteImage->deleteImage($image);
 
-        return $this->render('image/index.html.twig', [
-            'controller_name' => 'ImageController',
-        ]);
+        $url = $request->headers->get('referer');
+        return $this->redirect($url);
     }
 }

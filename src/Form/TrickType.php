@@ -24,7 +24,7 @@ class TrickType extends AbstractType
             ->add('category', EntityType::class, ['label' => 'Category of trick',
                 'class' => Category::class,
                 'choice_label' => 'name'])
-            ->add('mainImage', ImageType::class, ['label' => 'Main image'])
+            ->add('mainImage', ImageType::class, ['label' => 'Main image', 'required' => true])
             ->add('images', CollectionType::class, [
                 'entry_type' => ImageType::class,
                 'entry_options' => ['label' => false],

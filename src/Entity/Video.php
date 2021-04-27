@@ -36,7 +36,7 @@ class Video
     /**
      * @ORM\Column(type="datetime")
      */
-    private $creadtedAt;
+    private $createdAt;
 
     public function getId(): ?int
     {
@@ -78,7 +78,7 @@ class Video
      */
     public function setUpdatedAt(): void
     {
-        $this->updatedAt =  $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getCreadtedAt(): ?\DateTimeInterface
@@ -91,6 +91,6 @@ class Video
      */
     public function setCreatedAt(): void
     {
-        $this->createdAt =  $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = new \DateTimeImmutable();
     }
 }

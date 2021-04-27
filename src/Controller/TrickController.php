@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Comment;
-use App\Entity\Image;
 use App\Entity\Trick;
 use App\Form\TrickType;
 use App\Repository\TrickRepository;
@@ -12,8 +11,6 @@ use App\Service\Thumbnail;
 use App\Service\UploadImage;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,10 +31,7 @@ class TrickController extends AbstractController
         $trickId = $request->query->get('id');
         $trick = $trickRepository->findOneBy(['id' => $trickId]);
 
-        return $this->render('trick/index.html.twig', [
-            'controller_name' => 'TrickController',
-            'trick' => $trick
-        ]);
+        return $this->render('trick/index.html.twig', ['controller_name' => 'TrickController', 'trick' => $trick]);
     }
 
     /**
@@ -66,10 +60,7 @@ class TrickController extends AbstractController
         $entityManager->persist($comment);
         $entityManager->flush();
 
-        return $this->render('figure/index.html.twig', [
-            'controller_name' => 'TrickController',
-            'trick' => $trick
-        ]);
+        return $this->render('figure/index.html.twig', ['controller_name' => 'TrickController', 'trick' => $trick]);
     }
 
     /**
@@ -81,7 +72,8 @@ class TrickController extends AbstractController
      *
      * @return RedirectResponse|Response
      */
-    public function new(Request $request, EntityManagerInterface $entityManager, UploadImage $uploadImage, Cropper $cropper, Thumbnail $thumbnail)
+    public function new(Request $request, EntityManagerInterface $entityManager, UploadImage $uploadImage,
+                        Cropper $cropper, Thumbnail $thumbnail)
     {
         $user = $this->getUser();
 
@@ -132,9 +124,7 @@ class TrickController extends AbstractController
             return $this->redirectToRoute('home');
         }
 
-        return $this->render('trick/create.html.twig', [
-            'form' => $form->createView()
-        ]);
+        return $this->render('trick/create.html.twig', ['form' => $form->createView()]);
     }
 
     /**
@@ -143,25 +133,21 @@ class TrickController extends AbstractController
      */
     public function edit(Request $request, TrickRepository $trickRepository, EntityManagerInterface $entityManager)
     {
-
         $trickId = $request->query->get('id');
         $trick = $trickRepository->findOneBy(['id' => $trickId]);
 
         $form = $this->createForm(TrickType::class, $trick);
+        $form->remove('images');
+        $form->remove('mainImage');
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid())
         {
-            foreach($trick->getImages() as $image) {
-                $image->setTrick($trick);
-                $entityManager->persist($image);
-            }
+            $name = $form->get('name')->getData();
+            $description = $form->get('description')->getData();
 
-            foreach ($trick->getVideos() as $video) {
-                $video->setUrl($video->getUrl());
-
-                $entityManager->persist($video);
-            }
+            $trick->setName($name);
+            $trick->setDescription($description);
 
             $entityManager->persist($trick);
             $entityManager->flush();
@@ -171,13 +157,9 @@ class TrickController extends AbstractController
                 'The trick <strong>' . $trick->getName() . '</strong> as been updated'
             );
 
-            return $this->redirectToRoute('home', [
-            ]);
+            return $this->redirectToRoute('home', []);
         }
 
-        return $this->render('trick/edit.html.twig', [
-            'form' => $form->createView(),
-            'trick' => $trick
-        ]);
+        return $this->render('trick/edit.html.twig', ['form' => $form->createView(), 'trick' => $trick]);
     }
 }

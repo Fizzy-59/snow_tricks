@@ -74,7 +74,7 @@ class Trick
 
     /**
      * @ORM\OneToOne(targetEntity=Image::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $mainImage;
 
@@ -124,7 +124,7 @@ class Trick
      */
     public function setCreatedAt(): void
     {
-        $this->createdAt =  $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getUpdatedAt(): ?\DateTimeInterface
@@ -260,7 +260,7 @@ class Trick
         return $this->mainImage;
     }
 
-    public function setMainImage(Image $mainImage): self
+    public function setMainImage(?Image $mainImage): self
     {
         $this->mainImage = $mainImage;
 

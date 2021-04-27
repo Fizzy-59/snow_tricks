@@ -33,34 +33,60 @@
             </div>
         </div>
 
-        <div class="form-group">
-            {{ form_label(form.mainImage) }}
-            <div class="row">
-                <div class="col-sm-6">
-                    <h3>Main Image</h3>
-                    {{ form_errors(form.mainImage.file) }}
-                    {{ form_widget(form.mainImage.file) }}
-                    {{ form_help(form.mainImage.file) }}
-                    <a href="{{ path('image_delete') }}">
-                        <button class="favorite styled" type="button">Delete</button>
-                    </a>
-                </div>
-                <br/>
-                <div class="col-sm-6">
-                    {{ form_errors(form.mainImage.caption) }}
-                    {{ form_widget(form.mainImage.caption) }}
-                    {{ form_help(form.mainImage.caption) }}
-                </div>
-            </div>
-        </div>
+        <h3>Main Image</h3>
+        <div class="row">
+            <div class="col-sm">
+                <div class="card" style="width: 18rem;">
+                    <img src="{{ asset(trick.mainImage.pathThumbnail ~ '/' ~ trick.mainImage.name) }}"
+                         class="card-img-top" alt="{{ trick.mainImage.caption }}">
+                    <div class="card-body">
+                        <a href="{{ path('main_image_edit', {'id': trick.mainImage.id }) }}"><p class="card-text">
+                                Edit</p></a>
+                        <a href="{{ path('main_image_delete', {'id': trick.mainImage.id }) }}"><p class="card-text">
+                                Delete</p></a>
+                    </div> {# card-body #}
+                </div> {# col #}
+            </div> {# card #}
+        </div> {# row #}
 
         <h3>Images</h3>
-        {{ form_label(form.images) }}
-        {{ form_widget(form.images) }}
+        <div class="row">
+            {% for image in trick.images %}
+                {% if image.id != trick.mainImage.id %}
+                    <div class="col-sm">
+                        <div class="card" style="width: 18rem;">
+                            <img src="{{ asset(image.pathThumbnail ~ '/' ~ image.name) }}" class="card-img-top"
+                                 alt="Image of Trick">
+                            <div class="card-body">
+                                <p>{{ image.name }}</p>
+                                <a href="{{ path('image_edit', {'id': image.id }) }}"><p class="card-text">Edit</p></a>
+                                <a href="{{ path('image_delete', {'id': image.id }) }}"><p class="card-text">Delete</p>
+                                </a>
+                            </div> {# card-body #}
+                        </div> {# col #}
+                    </div> {# card #}
+                {% endif %}
+            {% endfor %}
+        </div> {# row #}
 
         <h3>Video</h3>
-        {{ form_label(form.videos) }}
-        {{ form_widget(form.videos) }}
+        <div class="row">
+            {% for video in trick.videos %}
+                <div class="col-sm">
+                    <div class="card" style="width: 18rem;">
+                        <iframe width="560" height="315" src=" {{ video.url }} "
+                                title="YouTube video player" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen>
+                        </iframe>
+                        <div class="card-body">
+                            <a href="{{ path('video_edit', {'id': video.id }) }}"><p class="card-text">Edit</p></a>
+                            <a href="{{ path('video_delete', {'id': video.id }) }}"><p class="card-text">Edit</p></a>
+                        </div> {# card-body #}
+                    </div> {# col #}
+                </div> {# card #}
+            {% endfor %}
+        </div> {# row #}
 
         <button type="submit" class="btn btn-success btn-lg col-12"><i class="fas fa-check"></i> UPDATE TRICK</button>
 
