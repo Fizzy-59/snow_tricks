@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Image;
 use App\Form\ImageType;
 use App\Repository\ImageRepository;
 use App\Service\ImageManager;
@@ -113,5 +114,37 @@ class ImageController extends AbstractController
 
         $url = $request->headers->get('referer');
         return $this->redirect($url);
+    }
+
+    /**
+     * @Route("/image/add", name="image_add")
+     */
+    public function addImage(EntityManagerInterface $entityManager, ImageManager $imageManager, Request $request): Response
+    {
+        // TODO: need to fix add mutiples images
+        $image = new Image();
+        $form = $this->createForm(ImageType::class, $image);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            foreach ($trick->getImages() as $image) {
+                $image->setTrick($trick);
+                $image->setCaption($image->getCaption());
+                $image = $imageManager->saveImage($image);
+
+                $entityManager->persist($image);
+
+                $imageManager->crop($image);
+                $imageManager->resize($image);
+            }
+
+            $entityManager->persist($trick);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('home');
+        }
+        return $this->render('image/add_image.html.twig', ['form' => $form->createView()]);
+
     }
 }

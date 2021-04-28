@@ -79,7 +79,6 @@ class TrickController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $
             $trick->setName($form->get('name')->getData());
             $trick->setDescription($form->get('description')->getData());
             $trick->setUser($user);
@@ -104,7 +103,14 @@ class TrickController extends AbstractController
                 $imageManager->resize($image);
             }
 
+            echo '<pre>';
+            var_dump($trick->getVideos());
+            die();
             foreach ($trick->getVideos() as $video) {
+                echo '<pre>';
+                var_dump($video->getUrl());
+                die();
+
                 $video->setTrick($trick);
                 $video->setUrl($video->getUrl());
                 $entityManager->persist($video);
