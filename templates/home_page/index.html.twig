@@ -4,6 +4,7 @@
 
 {% block body %}
 
+    <a href="{{ path('trick_create') }}"><p class="card-text">"Create trick"</p></a>
 
     <header style="background-image: url('https://via.placeholder.com/700')">
         <div class="contents-header text-center">
@@ -11,7 +12,8 @@
             <div style="margin-bottom: 3rem;" class="text-center">
             </div>
             <div class="sub-title">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Provident dolor numquam ad ipsam corrupti impedit libero illum eius distinctio earum porro explicabo qui culpa, necessitatibus minus dolore tenetur beatae ratione!
+                Lorem ipsum dolor sit amet, distinctio earum porro explicabo qui culpa, necessitatibus minus dolore
+                tenetur beatae ratione!
             </div>
         </div>
     </header>
@@ -25,7 +27,8 @@
                         <img src="{{ asset(trick.mainImage.pathThumbnail ~ '/' ~ trick.mainImage.name) }}"
                              class="card-img-top" alt="{{ trick.mainImage.caption }}">
                         <div class="card-body">
-                            <a href="{{ path('trick', {'id': trick.id }) }}"><p class="card-text">{{ trick.name }}</p></a>
+                            <a href="{{ path('trick', {'id': trick.id }) }}"><p class="card-text">{{ trick.name }}</p>
+                            </a>
                             <a href="{{ path('trick_edit', {'id': trick.id }) }}"><p class="card-text">Edit</p></a>
                         </div> {# card-body #}
                     </div> {# card #}

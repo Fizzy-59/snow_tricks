@@ -63,11 +63,6 @@ class TrickController extends AbstractController
 
     /**
      * @Route("/trick/create", name="trick_create")
-     *
-     * @param Request $request
-     * @param EntityManagerInterface $entityManager
-     *
-     * @return RedirectResponse|Response
      */
     public function new(Request $request, EntityManagerInterface $entityManager, ImageManager $imageManager): Response
     {
@@ -77,10 +72,8 @@ class TrickController extends AbstractController
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid())
-        {
-            $trick->setName($form->get('name')->getData());
-            $trick->setDescription($form->get('description')->getData());
+        if ($form->isSubmitted() && $form->isValid()) {
+            $trick = $form->getData();
             $trick->setUser($user);
 
             $mainImage = $trick->getMainImage();
@@ -93,6 +86,7 @@ class TrickController extends AbstractController
             $imageManager->resize($mainImage);
 
             foreach ($trick->getImages() as $image) {
+                // need to, prepersist
                 $image->setTrick($trick);
                 $image->setCaption($image->getCaption());
                 $image = $imageManager->saveImage($image);
@@ -103,18 +97,6 @@ class TrickController extends AbstractController
                 $imageManager->resize($image);
             }
 
-            echo '<pre>';
-            var_dump($trick->getVideos());
-            die();
-            foreach ($trick->getVideos() as $video) {
-                echo '<pre>';
-                var_dump($video->getUrl());
-                die();
-
-                $video->setTrick($trick);
-                $video->setUrl($video->getUrl());
-                $entityManager->persist($video);
-            }
 
             $entityManager->persist($trick);
             $entityManager->flush();
@@ -139,8 +121,7 @@ class TrickController extends AbstractController
         $form->remove('mainImage');
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid())
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
             $name = $form->get('name')->getData();
             $description = $form->get('description')->getData();
 
@@ -155,4 +136,52 @@ class TrickController extends AbstractController
 
         return $this->render('trick/edit.html.twig', ['form' => $form->createView(), 'trick' => $trick]);
     }
+
+    /**
+     * @Route("/trick/edit-details", name="trick_details_edit")
+     *
+     */
+    public function editInDetails(Request $request, TrickRepository $trickRepository, EntityManagerInterface $entityManager,
+                                  ImageManager $imageManager)
+    {
+        $trickId = $request->query->get('id');
+        $trick = $trickRepository->findOneBy(['id' => $trickId]);
+
+        $form = $this->createForm(TrickType::class, $trick);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $name = $form->get('name')->getData();
+            $description = $form->get('description')->getData();
+
+            $trick->setName($name);
+            $trick->setDescription($description);
+
+            foreach ($trick->getImages() as $image) {
+                $image->setTrick($trick);
+                $image->setCaption($image->getCaption());
+                $image = $imageManager->saveImage($image);
+
+                $entityManager->persist($image);
+
+                $imageManager->crop($image);
+                $imageManager->resize($image);
+            }
+
+            foreach ($trick->getVideos() as $video) {
+
+                $video->setTrick($trick);
+                $video->setUrl($video->getUrl());
+                $entityManager->persist($video);
+            }
+
+            $entityManager->persist($trick);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('home');
+        }
+
+        return $this->render('trick/edit_details.html.twig', ['form' => $form->createView(), 'trick' => $trick]);
+    }
 }
+

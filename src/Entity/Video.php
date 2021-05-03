@@ -48,7 +48,7 @@ class Video
         return $this->url;
     }
 
-    public function setUrl(string $url)
+    public function setUrl(string $url): self
     {
         $shortUrlRegex = '/youtu.be\/([a-zA-Z0-9_-]+)\??/i';
         $longUrlRegex = '/youtube.com\/((?:embed)|(?:watch))((?:\?v\=)|(?:\/))([a-zA-Z0-9_-]+)/i';
@@ -61,7 +61,8 @@ class Video
             $youtube_id = $matches[count($matches) - 1];
         }
 
-        return 'https://www.youtube.com/embed/' . $youtube_id ;
+        $this->url = 'https://www.youtube.com/embed/' . $youtube_id ;
+        return $this;
     }
 
     public function getTrick(): ?Trick

@@ -1,17 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Create Trick{% endblock %}
+{% block title %}Edit a trick{% endblock %}
 
 {% block body %}
 
     <script>
         jQuery(document).ready(function () {
             // Get the ul that holds the collection of tags
-            var $imagesCollectionHolder = $('ul.images');
-            $imagesCollectionHolder.data('index', $imagesCollectionHolder.find('input').length);
-
-            var $videosCollectionHolder = $('ul.videos');
-            $videosCollectionHolder.data('index', $videosCollectionHolder.find('input').length);
+            var $tagsCollectionHolder = $('ul.images');
+            // count the current form inputs we have (e.g. 2), use that as the new
+            // index when inserting a new item (e.g. 2)
+            $tagsCollectionHolder.data('index', $tagsCollectionHolder.find('input').length);
 
             $('body').on('click', '.add_item_link', function (e) {
                 var $collectionHolderClass = $(e.currentTarget).data('collectionHolderClass');
@@ -55,30 +54,40 @@
             <div class="mx-auto">
                 <div class="col-sm">
 
-                    <h1>Adding a new trick</h1>
+                    <h1>Edit a trick</h1>
 
                     {{ form_start(form) }}
 
                     {{ form_row(form.name) }}
                     {{ form_row(form.description) }}
+                    {{ form_row(form.category) }}
+
+                    <h3>Main Image</h3>
                     {{ form_row(form.mainImage) }}
 
+                    <h3>Images</h3>
+                    <ul class="images" data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}">
+                        {% for image in form.images %}
+                            <li>
+                                {{ form_row(image) }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <button type="button" class="add_item_link" data-collection-holder-class="images">Add an image
+                    </button>
+
                     <h3>Videos</h3>
-                    <ul class="videos"
-                        data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}"></ul>
+                    <ul class="videos" data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}">
+                        {% for video in form.videos %}
+                            <li>
+                                {{ form_row(video) }}
+                            </li>
+                        {% endfor %}
+                    </ul>
                     <button type="button" class="add_item_link" data-collection-holder-class="videos">Add a video
                     </button>
 
-                    <h3>Images</h3>
-                    <ul class="images"
-                        data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}"></ul>
-                    <button type="button" class="add_item_link" data-collection-holder-class="images">Add a image
-                    </button>
-
-
-                    {{ form_row(form.category) }}
-
-                    <button class="btn btn-primary">Create Trick</button>
+                    <button class="btn btn-primary">Update Trick</button>
                     {{ form_end(form) }}
 
                 </div> {# col #}

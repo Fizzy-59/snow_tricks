@@ -4,6 +4,9 @@
 
 
 {% block body %}
+
+    <a href="{{ path('trick_details_edit', {'id': trick.id }) }}"><p class="card-text">"Edit details trick"</p></a>
+
     <div class="col-lg-7 col-md-10 mx-auto">
         <h1>Modifier le trick : {{ trick.name }}</h1>
         {{ form_start(form) }}
