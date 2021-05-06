@@ -11,10 +11,7 @@
             <h1 class="header-title text-center">SnowTricks</h1>
             <div style="margin-bottom: 3rem;" class="text-center">
             </div>
-            <div class="sub-title">
-                Lorem ipsum dolor sit amet, distinctio earum porro explicabo qui culpa, necessitatibus minus dolore
-                tenetur beatae ratione!
-            </div>
+
         </div>
     </header>
 
@@ -22,8 +19,8 @@
         <div class="row">
 
             {% for trick in tricks %}
-                <div class="col-sm">
-                    <div class="card" style="width: 18rem;">
+                <div class="col-sm-2 m-1">
+                    <div class="card" style="width: 10rem">
                         <img src="{{ asset(trick.mainImage.pathThumbnail ~ '/' ~ trick.mainImage.name) }}"
                              class="card-img-top" alt="{{ trick.mainImage.caption }}">
                         <div class="card-body">
