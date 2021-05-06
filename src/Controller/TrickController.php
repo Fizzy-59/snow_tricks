@@ -9,7 +9,6 @@ use App\Repository\TrickRepository;
 use App\Service\ImageManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -29,7 +28,15 @@ class TrickController extends AbstractController
         $trickId = $request->query->get('id');
         $trick = $trickRepository->findOneBy(['id' => $trickId]);
 
-        return $this->render('trick/index.html.twig', ['controller_name' => 'TrickController', 'trick' => $trick]);
+        $user = $this->getUser();
+        $gravatarUrl = 'http://www.gravatar.com/avatar/' . md5($user->getUsername()) . '?s=32';
+
+        return $this->render('trick/index.html.twig',
+            [
+                'gravatarUrl' => $gravatarUrl,
+                'user' => $user,
+                'trick' => $trick
+            ]);
     }
 
     /**

@@ -6,130 +6,158 @@
 
     <div class="container">
 
-        {# MAIN IMAGE #}
-        <div class="row">
-            <div class="col">
-                <div class="card" style="width: 60rem;">
-                    <img src="{{ asset(trick.mainImage.pathThumbnail ~ '/' ~ trick.mainImage.name) }}"
-                         class="card-img-top" alt="{{ trick.mainImage.caption }}">
-                    <div class="card-body">
-                    </div> {# card-body #}
-                </div> {# col #}
-            </div> {# card #}
-        </div> {# row #}
-        <hr>
+    {# MAIN IMAGE #}
+    <div class="row">
+        <div class="col">
+            <div class="card" style="width: 60rem;">
+                <img src="{{ asset(trick.mainImage.pathThumbnail ~ '/' ~ trick.mainImage.name) }}"
+                     class="card-img-top" alt="{{ trick.mainImage.caption }}">
+                <div class="card-body">
+                </div> {# card-body #}
+            </div> {# col #}
+        </div> {# card #}
+    </div> {# row #}
+    <hr>
 
-        {# IMAGES #}
-        <div class="row">
-            {% for image in trick.images %}
-                {% if image.id != trick.mainImage.id %}
-                    <div class="col">
-                        <div class="card" style="width: 20rem; height: 15rem">
-                            <img src="{{ asset(image.pathThumbnail ~ '/' ~ image.name) }}" class="card-img-top"
-                                 alt="Image of Trick">
-                            <div class="card-body">
-                            </div> {# card-body #}
-                        </div> {# col #}
-                    </div> {# card #}
-                {% endif %}
-            {% endfor %}
-
-            {# VIDEOS #}
-            {% for video in trick.videos %}
+    {# IMAGES #}
+    <div class="row">
+        {% for image in trick.images %}
+            {% if image.id != trick.mainImage.id %}
                 <div class="col">
                     <div class="card" style="width: 20rem; height: 15rem">
-                        <iframe width="320" height="320" src=" {{ video.url }} "
-                                title="YouTube video player" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen>
-                        </iframe>
+                        <img src="{{ asset(image.pathThumbnail ~ '/' ~ image.name) }}" class="card-img-top"
+                             alt="Image of Trick">
                         <div class="card-body">
                         </div> {# card-body #}
                     </div> {# col #}
                 </div> {# card #}
-            {% endfor %}
-        </div> {# row #}
+            {% endif %}
+        {% endfor %}
 
-        <div class="row">
-            <p>{{ trick.description }}</p>
-        </div> {# row #}
-
-        <div class="row">
+        {# VIDEOS #}
+        {% for video in trick.videos %}
             <div class="col">
-                <p>{{ trick.category.name }}</p>
-                <p>{{ trick.createdAt|date('d-m-Y à H:i') }}</p>
+                <div class="card" style="width: 20rem; height: 15rem">
+                    <iframe width="320" height="320" src=" {{ video.url }} "
+                            title="YouTube video player" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                    </iframe>
+                    <div class="card-body">
+                    </div> {# card-body #}
+                </div> {# col #}
+            </div> {# card #}
+        {% endfor %}
+    </div> {# row #}
 
-                {% if trick.createdAt != trick.updatedAt %}
-                    <p>{{ trick.updatedAt|date('d-m-Y à H:i') }}</p>
-                {% endif %}
+    <div class="row">
+        <p>{{ trick.description }}</p>
+    </div> {# row #}
+
+    <div class="row">
+
+        <div class="col">
+            <div class="card">
+                <div class="card-body text-center">
+                    {{ trick.category.name }}
+                </div> {# card-body #}
+            </div> {# card #}
+        </div> {# col #}
+
+        <div class="col">
+            <div class="card">
+                <div class="card-body text-center">
+                    {{ trick.createdAt|date('d-m-Y à H:i') }}
+                </div> {# card-body #}
+            </div> {# card #}
+        </div> {# col #}
+
+        {% if trick.createdAt != trick.updatedAt %}
+            <div class="col">
+                <div class="card">
+                    <div class="card-body text-center">
+                        {{ trick.updatedAt|date('d-m-Y à H:i') }}
+                    </div> {# card-body #}
+                </div> {# card #}
+            </div> {# col #}
+        {% endif %}
+
+    </div> {# row #}
+
+    {# Add Comment #}
+    {% if app.user %}
+        <div class="row text-center">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <p>
+                    <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button"
+                       aria-expanded="false" aria-controls="collapseExample">
+                        Add a comment </a>
+                </p>
+            </div>
+        </div> {# row #}
+        <hr>
+
+        {# Errors #}{#
+    {% for error in errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+    {% endfor %} #}
+
+        {# Form  add comment #}
+        <div class="row">
+            <div class="col-lg-8 col-md-8 mx-auto">
+                <div class="collapse" id="collapseExample">
+                    <div class="card card-body">
+                        <div class="form-group">
+                            <form action="{{ path('add_comment') }}" method="post">
+                                <input class="col-lg-6 col-sm-6 " type="text" id="comment" name="comment" required
+                                       minlength="0">
+                                <input class="btn btn-primary" type="submit">
+                                <input type="hidden" name="trickId" value="{{ trick.id }}"/>
+                            </form>
+                        </div> {# form-group #}
+                    </div> {# card #}
+                </div> {# colapse #}
             </div> {# col #}
         </div> {# row #}
 
-        {# Add Comment #}
-        {% if app.user %}
-            <div class="row text-center">
-                <div class="col-lg-8 col-md-10 mx-auto">
-                    <p>
-                        <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button"
-                           aria-expanded="false" aria-controls="collapseExample">
-                            Ajouter un commentaire </a>
-                    </p>
-                </div>
-            </div> {# row #}
-            <hr>
+    {% endif %}
 
-            {# Errors #}{#
-        {% for error in errors %}
-            <div class="alert alert-danger" role="alert">
-                {{ error }}
-            </div>
-        {% endfor %} #}
+    <br>
 
-            {# Form  add comment #}
-            <div class="row">
-                <div class="col-lg-8 col-md-8 mx-auto">
-                    <div class="collapse" id="collapseExample">
-                        <div class="card card-body">
-                            <div class="form-group">
-                                <form action="{{ path('add_comment') }}" method="post">
-                                    <input class="col-lg-6 col-sm-6 " type="text" id="comment" name="comment" required
-                                           minlength="0">
-                                    <input class="btn btn-primary" type="submit">
-                                    <input type="hidden" name="trickId" value="{{ trick.id }}"/>
-                                </form>
-                            </div> {# form-group #}
-                        </div> {# card #}
-                    </div> {# colapse #}
-                </div> {# col #}
-            </div> {# row #}
+    {# Comment #}
+    {% for comment in trick.comments %}
+        <div class="row mb-2">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="card card-white post p-2">
 
-        {% endif %}
+                    <li class="media"><span class="round pt-8"><img
+                                    src="{{ gravatarUrl }}"
+                                    class="align-self-start mr-3" alt="profile picture of user"></span>
 
-        <br>
-
-        {# Comment #}
-        {% for comment in trick.comments %}
-            <div class="row mb-2">
-                <div class="col-lg-8 col-md-10 mx-auto">
-                    <div class="card card-white post p-2">
                         <div class="post-heading">
                             <div class="float-left meta">
+
                                 <div class="title h5">
                                     <b>{{ comment.user.username }}</b>
                                 </div> {# title h5 #}
+
                                 <h6 class="text-muted time">{{ comment.createdAt|date('d-m-Y à H:i') }}</h6>
+
                             </div> {# float-left #}
-                        </div>
+                        </div> {# post-heading #}
+
                         <div class="post-description">
                             <p>{{ comment.content }}</p>
                         </div> {# post-description #}
-                    </div> {# card #}
-                </div> {# col #}
-            </div> {# row #}
-        {% endfor %}
 
-    </div>
+                </div> {# card #}
+            </div> {# col #}
+        </div> {# row #}
+    {% endfor %}
 
-    </div> {# container #}
+    </div>{# container #}
+
 
 {% endblock %}
