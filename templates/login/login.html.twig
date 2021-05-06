@@ -1,41 +1,49 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Log in{% endblock %}
 
 {% block body %}
 
     <div class="container">
         <div class="row">
-            <div class="col">
+            <div class="mx-auto">
+                <div class="col">
 
-                <form method="post">
-                    {% if error %}
-                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'login') }}</div>
-                    {% endif %}
+                    <form method="post">
+                        {% if error %}
+                            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'login') }}</div>
+                        {% endif %}
 
-                    <h1>Login</h1>
+                        <h1 class="text-center">Login</h1>
 
-                    <div class="card" style="width: 18rem;">
-                        <div class="card-body">
-                            <p class="card-text"><label for="inputEmail">Email</label>
-                                <input type="email" value="{{ last_username }}" name="email" id="inputEmail"
-                                       class="form-control"
-                                       required autofocus></p>
-                            <p class="card-text"><label for="inputPassword">Password</label>
-                                <input type="password" name="password" id="inputPassword" class="form-control" required>
-                            </p>
-                            <a href="{{ path('app_forgot_password_request') }}">Forgot Password ?</a>
-                            <button class="btn btn-lg btn-primary" type="submit">
-                                Login
-                            </button>
-                            <input type="hidden" name="_csrf_token"
-                                   value="{{ csrf_token('authenticate') }}"
-                            >
-                        </div> {# card-body #}
-                    </div> {# card #}
+                        <div class="card text-center" style="width: 18rem;">
+                            <div class="card-body">
+                                <p class="card-text"><label for="inputEmail">Email</label>
+                                    <input type="email" value="{{ last_username }}" name="email" id="inputEmail"
+                                           class="form-control"
+                                           required autofocus></p>
 
-                </form>
-            </div> {# col #}
+                                <p class="card-text"><label for="inputPassword">Password</label>
+                                    <input type="password" name="password" id="inputPassword" class="form-control"
+                                           required>
+                                </p>
+
+                                <a href="{{ path('app_forgot_password_request') }}">Forgot Password ?</a>
+                                <hr>
+                                <button class="btn btn-lg btn-primary" type="submit">
+                                    Login
+                                </button>
+
+                                <input type="hidden" name="_csrf_token"
+                                       value="{{ csrf_token('authenticate') }}"
+                                >
+
+                            </div> {# card-body #}
+                        </div> {# card #}
+
+                    </form>
+                </div> {# col #}
+            </div> {# mx-auto #}
         </div> {# row #}
     </div> {# container #}
 

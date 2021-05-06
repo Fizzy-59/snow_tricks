@@ -4,51 +4,7 @@
 
 {% block body %}
 
-    <script>
-        jQuery(document).ready(function () {
-            // Get the ul that holds the collection of tags
-            var $imagesCollectionHolder = $('ul.images');
-            $imagesCollectionHolder.data('index', $imagesCollectionHolder.find('input').length);
-
-            var $videosCollectionHolder = $('ul.videos');
-            $videosCollectionHolder.data('index', $videosCollectionHolder.find('input').length);
-
-            $('body').on('click', '.add_item_link', function (e) {
-                var $collectionHolderClass = $(e.currentTarget).data('collectionHolderClass');
-                // add a new tag form (see next code block)
-                addFormToCollection($collectionHolderClass);
-
-                function addFormToCollection($collectionHolderClass) {
-                    // Get the ul that holds the collection of tags
-                    var $collectionHolder = $('.' + $collectionHolderClass);
-
-                    // Get the data-prototype explained earlier
-                    var prototype = $collectionHolder.data('prototype');
-
-                    // get the new index
-                    var index = $collectionHolder.data('index');
-
-                    var newForm = prototype;
-                    // You need this only if you didn't set 'label' => false in your tags field in TaskType
-                    // Replace '__name__label__' in the prototype's HTML to
-                    // instead be a number based on how many items we have
-                    // newForm = newForm.replace(/__name__label__/g, index);
-
-                    // Replace '__name__' in the prototype's HTML to
-                    // instead be a number based on how many items we have
-                    newForm = newForm.replace(/__name__/g, index);
-
-                    // increase the index with one for the next item
-                    $collectionHolder.data('index', index + 1);
-
-                    // Display the form in the page in an li, before the "Add a tag" link li
-                    var $newFormLi = $('<li></li>').append(newForm);
-                    // Add the new form at the end of the list
-                    $collectionHolder.append($newFormLi)
-                }
-
-            })
-        });</script>
+    {% include '/utils/script_multiple_add.html.twig' %}
 
     <div class="container">
         <div class="row">
@@ -63,18 +19,7 @@
                     {{ form_row(form.description) }}
                     {{ form_row(form.mainImage) }}
 
-                    <h3>Videos</h3>
-                    <ul class="videos"
-                        data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}"></ul>
-                    <button type="button" class="add_item_link" data-collection-holder-class="videos">Add a video
-                    </button>
-
-                    <h3>Images</h3>
-                    <ul class="images"
-                        data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}"></ul>
-                    <button type="button" class="add_item_link" data-collection-holder-class="images">Add a image
-                    </button>
-
+                    {% include '/utils/add_button.html.twig' %}
 
                     {{ form_row(form.category) }}
 
