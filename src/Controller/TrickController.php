@@ -27,13 +27,10 @@ class TrickController extends AbstractController
     {
         $trickId = $request->query->get('id');
         $trick = $trickRepository->findOneBy(['id' => $trickId]);
-
         $user = $this->getUser();
-        $gravatarUrl = 'http://www.gravatar.com/avatar/' . md5($user->getUsername()) . '?s=32';
 
         return $this->render('trick/index.html.twig',
             [
-                'gravatarUrl' => $gravatarUrl,
                 'user' => $user,
                 'trick' => $trick
             ]);
@@ -65,7 +62,7 @@ class TrickController extends AbstractController
         $entityManager->persist($comment);
         $entityManager->flush();
 
-        return $this->render('trick/index.html.twig', ['controller_name' => 'TrickController', 'trick' => $trick]);
+        return $this->redirect($this->generateUrl('trick'));
     }
 
     /**

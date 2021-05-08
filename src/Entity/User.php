@@ -69,6 +69,11 @@ class User implements UserInterface
      */
     private $isVerified = false;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $gravatar;
+
     public function __construct()
     {
         $this->tricks = new ArrayCollection();
@@ -233,7 +238,7 @@ class User implements UserInterface
      */
     public function setCreatedAt(): void
     {
-        $this->createdAt =  $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getUpdatedAt(): ?\DateTimeInterface
@@ -247,7 +252,7 @@ class User implements UserInterface
      */
     public function setUpdatedAt(): void
     {
-        $this->updatedAt =  $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     public function isVerified(): bool
@@ -258,6 +263,18 @@ class User implements UserInterface
     public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    public function getGravatar(): ?string
+    {
+        return $this->gravatar;
+    }
+
+    public function setGravatar(string $gravatar): self
+    {
+        $this->gravatar = $gravatar;
 
         return $this;
     }

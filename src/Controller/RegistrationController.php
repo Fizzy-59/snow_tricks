@@ -47,6 +47,11 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
+            $gravatarUrl = 'http://www.gravatar.com/avatar/' . md5($user->getUsername()) . '?s=32';;
+            $user->setGravatar($gravatarUrl);
+            $entityManager->persist($user);
+            $entityManager->flush();
+
             // generate a signed url and email it to the user
             $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                 (new TemplatedEmail())

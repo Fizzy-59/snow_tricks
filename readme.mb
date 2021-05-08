@@ -12,3 +12,5 @@ php bin/console doctrine:schema:update --force
 address mail:
 contact@snowtricks.devillezdeveloppement.info
 il[ZPkz3@!od
+
+symfony server:start

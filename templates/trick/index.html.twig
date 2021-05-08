@@ -67,7 +67,7 @@
         <div class="col">
             <div class="card">
                 <div class="card-body text-center">
-                    {{ trick.createdAt|date('d-m-Y à H:i') }}
+                    {{ trick.createdAt|date('d-m-Y  H:i') }}
                 </div> {# card-body #}
             </div> {# card #}
         </div> {# col #}
@@ -76,7 +76,7 @@
             <div class="col">
                 <div class="card">
                     <div class="card-body text-center">
-                        {{ trick.updatedAt|date('d-m-Y à H:i') }}
+                        {{ trick.updatedAt|date('d-m-Y  H:i') }}
                     </div> {# card-body #}
                 </div> {# card #}
             </div> {# col #}
@@ -125,32 +125,37 @@
     {% endif %}
 
     <br>
-
     {# Comment #}
     {% for comment in trick.comments %}
         <div class="row mb-2">
             <div class="col-lg-8 col-md-10 mx-auto">
                 <div class="card card-white post p-2">
 
-                    <li class="media"><span class="round pt-8"><img
-                                    src="{{ gravatarUrl }}"
-                                    class="align-self-start mr-3" alt="profile picture of user"></span>
+                    {% if comment.user.gravatar != null %}
+                        <img src="{{ comment.user.gravatar }}" class="align-self-start mr-3 rounded-circle"
+                             alt="profile picture of user">
+                    {% else %}
+                        <a href="{{ path('gravatar') }}"><img src="https://i.imgur.com/yTFUilP.jpg" class="align-self-start mr-3 rounded-circle"
+                                        alt="profile picture of user"></a>
+                        <img src="htts://i.imgur.com/yTFUilP.jpg" class="align-self-start mr-3 rounded-circle"
+                             alt="profile picture of user">
+                    {% endif %}
 
-                        <div class="post-heading">
-                            <div class="float-left meta">
+                    <div class="post-heading">
+                        <div class="float-left meta">
 
-                                <div class="title h5">
-                                    <b>{{ comment.user.username }}</b>
-                                </div> {# title h5 #}
+                            <div class="title h5">
+                                <b>{{ comment.user.username }}</b>
+                            </div> {# title h5 #}
 
-                                <h6 class="text-muted time">{{ comment.createdAt|date('d-m-Y à H:i') }}</h6>
+                            <h6 class="text-muted time">{{ comment.createdAt|date('d-m-Y  H:i') }}</h6>
 
-                            </div> {# float-left #}
-                        </div> {# post-heading #}
+                        </div> {# float-left #}
+                    </div> {# post-heading #}
 
-                        <div class="post-description">
-                            <p>{{ comment.content }}</p>
-                        </div> {# post-description #}
+                    <div class="post-description">
+                        <p>{{ comment.content }}</p>
+                    </div> {# post-description #}
 
                 </div> {# card #}
             </div> {# col #}
