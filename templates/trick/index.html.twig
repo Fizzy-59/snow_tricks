@@ -127,20 +127,22 @@
     <br>
     {# Comment #}
     {% for comment in trick.comments %}
-        <div class="row mb-2">
-            <div class="col-lg-8 col-md-10 mx-auto">
+        <div class="row">
+
+            <div class="col-2 align-self-center text-center">
+                {% if comment.user.gravatar != null %}
+                    <img src="{{ comment.user.gravatar }}" class="align-self-start mr-3 rounded-circle"
+                         alt="profile picture of user">
+                {% else %}
+                    <a href="{{ path('add_gravatar') }}">
+                        <img src="https://i.imgur.com/yTFUilP.jpg"
+                             class="align-self-start mr-3 rounded-circle"
+                             alt="profile picture of user"></a>
+                {% endif %}
+            </div> {# col #}
+
+            <div class="col-10">
                 <div class="card card-white post p-2">
-
-                    {% if comment.user.gravatar != null %}
-                        <img src="{{ comment.user.gravatar }}" class="align-self-start mr-3 rounded-circle"
-                             alt="profile picture of user">
-                    {% else %}
-                        <a href="{{ path('gravatar') }}"><img src="https://i.imgur.com/yTFUilP.jpg" class="align-self-start mr-3 rounded-circle"
-                                        alt="profile picture of user"></a>
-                        <img src="htts://i.imgur.com/yTFUilP.jpg" class="align-self-start mr-3 rounded-circle"
-                             alt="profile picture of user">
-                    {% endif %}
-
                     <div class="post-heading">
                         <div class="float-left meta">
 
@@ -155,11 +157,11 @@
 
                     <div class="post-description">
                         <p>{{ comment.content }}</p>
-                    </div> {# post-description #}
+                    </div>
+                </div>
+            </div>
 
-                </div> {# card #}
-            </div> {# col #}
-        </div> {# row #}
+        </div>
     {% endfor %}
 
     </div>{# container #}
