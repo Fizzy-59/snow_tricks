@@ -16,17 +16,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class TrickController extends AbstractController
 {
     /**
-     * @Route("/trick", name="trick")
+     * @Route("/trick/{id}", name="trick")
      *
-     * @param TrickRepository $trickRepository
-     * @param Request $request
      *
      * @return Response
      */
-    public function index(TrickRepository $trickRepository, Request $request): Response
+    public function show(Trick $trick): Response
     {
-        $trickId = $request->query->get('id');
-        $trick = $trickRepository->findOneBy(['id' => $trickId]);
         $user = $this->getUser();
 
         return $this->render('trick/index.html.twig',
@@ -62,13 +58,13 @@ class TrickController extends AbstractController
         $entityManager->persist($comment);
         $entityManager->flush();
 
-        return $this->redirect($this->generateUrl('trick'));
+        return $this->redirect($this->generateUrl('trick', ['id' => $trick->getId()]));
     }
 
     /**
      * @Route("/trick/create", name="trick_create")
      */
-    public function new(Request $request, EntityManagerInterface $entityManager, ImageManager $imageManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
 
@@ -79,29 +75,6 @@ class TrickController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $trick = $form->getData();
             $trick->setUser($user);
-
-            $mainImage = $trick->getMainImage();
-            $mainImage->setTrick($trick);
-            $mainImage = $imageManager->saveImage($mainImage);
-
-            $entityManager->persist($mainImage);
-
-            $imageManager->crop($mainImage);
-            $imageManager->resize($mainImage);
-
-            foreach ($trick->getImages() as $image) {
-                // need to, prepersist
-                $image->setTrick($trick);
-                $image->setCaption($image->getCaption());
-                $image = $imageManager->saveImage($image);
-
-                $entityManager->persist($image);
-
-                $imageManager->crop($image);
-                $imageManager->resize($image);
-            }
-
-
             $entityManager->persist($trick);
             $entityManager->flush();
 

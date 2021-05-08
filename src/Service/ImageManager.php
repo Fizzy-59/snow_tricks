@@ -5,31 +5,39 @@ namespace App\Service;
 
 
 use App\Entity\Image;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
 class ImageManager
 {
-    private $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager)
-    {
-        $this->entityManager = $entityManager;
-    }
-
-    public function deleteImage($image)
+    /**
+     * Delete an image
+     *
+     * @param Image $image
+     */
+    public static function deleteImage(Image $image): void
     {
         $fileSystem = new Filesystem();
-
         // Delete image in folder tricks
         $fileSystem->remove($image->getPath() . '/' . $image->getName());
         // Delete image in folder cropped
         $fileSystem->remove($image->getPath() . '/cropped/' . $image->getName());
         // Delete image in folder thumbnail
         $fileSystem->remove($image->getPath() . '/thumbnail/' . $image->getName());
-        //Delete object image
-        $this->entityManager->remove($image);
-        $this->entityManager->flush();
+    }
+
+    /**
+     * Upload an image
+     *
+     * @param Image $image
+     */
+    public static function saveImage(Image $image): void
+    {
+        $file = $image->getFile();
+        $file->move($image->getPath(), $image->getName());
+
+        self::crop($image);
+        self::resize($image);
     }
 
     /**
@@ -37,7 +45,7 @@ class ImageManager
      *
      * @param Image $image
      */
-    public function crop(Image $image)
+    public static function crop(Image $image): void
     {
         $fullPath = $image->getPath() . '/' . $image->getName();
         $extension = pathinfo($fullPath, PATHINFO_EXTENSION);
@@ -45,7 +53,7 @@ class ImageManager
 
         if ($extension === 'jpeg' || $extension === 'jpg') {
             $originalImg = imagecreatefromjpeg($fullPath);
-        } else if ($extension == 'png') {
+        } else if ($extension === 'png') {
             $originalImg = imagecreatefrompng($fullPath);
         }
 
@@ -72,7 +80,7 @@ class ImageManager
             if ($croppedImg !== FALSE) {
                 if ($extension === 'jpeg' || $extension === 'jpg') {
                     imagejpeg($croppedImg, $savingFullPath);
-                } else if ($extension == 'png') {
+                } else if ($extension === 'png') {
                     imagepng($croppedImg, $savingFullPath);
                 }
                 // Release ram
@@ -81,7 +89,7 @@ class ImageManager
         } else {
             if ($extension === 'jpeg' || $extension === 'jpg') {
                 imagejpeg($originalImg, $savingFullPath);
-            } else if ($extension == 'png') {
+            } else if ($extension === 'png') {
                 imagepng($originalImg, $savingFullPath);
             }
         }
@@ -89,31 +97,13 @@ class ImageManager
         imagedestroy($originalImg);
     }
 
-    /**
-     * Upload an image
-     *
-     * @param Image $image
-     * @return Image
-     */
-    public function saveImage(Image $image): Image
-    {
-        $file = $image->getFile();
-        $name = md5(uniqid()) . '.' . $file->guessExtension();
-        $path = 'img/tricks';
-        $file->move($path, $name);
-
-        $image->setPath($path);
-        $image->setName($name);
-
-        return $image;
-    }
 
     /**
      * Resize in 16X9
      *
      * @param Image $image
      */
-    public function resize(Image $image)
+    public static function resize(Image $image): void
     {
         $fullPath = $image->getPath() . '/cropped/' . $image->getName();
         $extension = pathinfo($fullPath, PATHINFO_EXTENSION);
@@ -123,7 +113,7 @@ class ImageManager
 
         if ($extension === 'jpeg' || $extension === 'jpg') {
             $originalImg = imagecreatefromjpeg($fullPath);
-        } else if ($extension == 'png') {
+        } else if ($extension === 'png') {
             $originalImg = imagecreatefrompng($fullPath);
         }
 
@@ -143,7 +133,7 @@ class ImageManager
             if ($resizeSuccess !== FALSE) {
                 if ($extension === 'jpeg' || $extension === 'jpg') {
                     imagejpeg($thumbnail, $savingFullPath);
-                } else if ($extension == 'png') {
+                } else if ($extension === 'png') {
                     imagepng($thumbnail, $savingFullPath);
                 }
                 // Release ram
@@ -152,7 +142,7 @@ class ImageManager
         } else {
             if ($extension === 'jpeg' || $extension === 'jpg') {
                 imagejpeg($originalImg, $savingFullPath);
-            } else if ($extension == 'png') {
+            } else if ($extension === 'png') {
                 imagepng($originalImg, $savingFullPath);
             }
         }

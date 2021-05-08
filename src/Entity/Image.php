@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ImageRepository;
+use App\Service\ImageManager;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -67,9 +68,14 @@ class Image
         return $this->name;
     }
 
-    public function setName(string $name): self
+    /**
+     * @ORM\PrePersist
+     *
+     * @return $this
+     */
+    public function setName(): self
     {
-        $this->name = $name;
+        $this->name = md5(uniqid()) . '.' . $this->file->guessExtension();
 
         return $this;
     }
@@ -91,9 +97,14 @@ class Image
         return $this->path;
     }
 
-    public function setPath(string $path): self
+    /**
+     * @ORM\PrePersist
+     *
+     * @return $this
+     */
+    public function setPath(): self
     {
-        $this->path = $path;
+        $this->path = 'img/tricks';
 
         return $this;
     }
@@ -132,7 +143,7 @@ class Image
      */
     public function setCreatedAt(): void
     {
-        $this->createdAt =  $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getUpdatedAt(): ?\DateTimeInterface
@@ -146,7 +157,7 @@ class Image
      */
     public function setUpdatedAt(): void
     {
-        $this->updatedAt =  $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     public function getPathCropped(): ?string
@@ -157,5 +168,28 @@ class Image
     public function getPathThumbnail(): ?string
     {
         return $this->path . '/thumbnail';
+    }
+
+    /**
+     * @ORM\PostPersist
+     * @ORM\PostUpdate
+     *
+     * @return $this
+     */
+    public function saveImage(): self
+    {
+        ImageManager::saveImage($this);
+        return $this;
+    }
+
+    /**
+     * @ORM\PreRemove
+     *
+     * @return $this
+     */
+    public function deleteImage(): self
+    {
+        ImageManager::deleteImage($this);
+        return $this;
     }
 }
