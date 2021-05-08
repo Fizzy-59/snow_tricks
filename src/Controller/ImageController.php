@@ -16,26 +16,20 @@ use Symfony\Component\Routing\Annotation\Route;
 class ImageController extends AbstractController
 {
     /**
-     * @Route("/image/edit", name="image_edit")
+     * @Route("/image/{id}/edit", name="image_edit")
+     *
+     * @param Image $image
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return Response
      */
-    public function edit(Request $request, ImageRepository $imageRepository, EntityManagerInterface $entityManager,
-                         ImageManager $imageManager): Response
+    public function editImage(Image $image, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $imageId = $request->query->get('id');
-        $image = $imageRepository->findOneBy(['id' => $imageId]);
-
         $form = $this->createForm(ImageType::class, $image);
+
         $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid())
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
             $image = $form->getData();
-
-            $imageFile = $imageManager->saveImage($image);
-
-            $imageManager->crop($imageFile);
-            $imageManager->resize($imageFile);
-
             $entityManager->persist($image);
             $entityManager->flush();
 
@@ -46,25 +40,21 @@ class ImageController extends AbstractController
     }
 
     /**
-     * @Route("/main-image/edit", name="main_image_edit")
+     * @Route("/main-image/{id}/edit", name="main_image_edit")
+     *
+     * @param Image $image
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return Response
      */
-    public function editMainImage(Request $request, ImageRepository $imageRepository, EntityManagerInterface $entityManager,
-                                  ImageManager $imageManager): Response
+    public function editMainImage(Image $image, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $imageId = $request->query->get('id');
-        $image = $imageRepository->findOneBy(['id' => $imageId]);
-
         $form = $this->createForm(ImageType::class, $image);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid())
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
             $image = $form->getData();
-
-            $imageFile = $imageManager->saveImage($image);
-
-            $imageManager->crop($imageFile);
-            $imageManager->resize($imageFile);
+            // TODO: set new MainImage()
 
             $entityManager->persist($image);
             $entityManager->flush();
@@ -76,13 +66,15 @@ class ImageController extends AbstractController
     }
 
     /**
-     * @Route("/main-image/delete/id", name="main_image_delete")
+     * @Route("/main-image/{id}/delete", name="main_image_delete")
+     *
+     * @param Image $image
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return Response
      */
-    public function deleteMainImage(ImageRepository $imageRepository, Request $request, ImageManager $imageManager,
-        EntityManagerInterface $entityManager): Response
+    public function deleteMainImage(Image $image, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $imageId = $request->query->get('id');
-        $image = $imageRepository->findOneBy(['id' => $imageId]);
         $trick = $image->getTrick();
         $collectionOfImages = $trick->getImages();
         // TODO : use object
@@ -90,7 +82,7 @@ class ImageController extends AbstractController
 
         // TODO: personalize message and redirect
         // If there is one image or less, it is impossible to delete the main image because it cannot be replaced.
-        if($nbOfImages <= 1) throw new BadMessageException('joe');
+        if ($nbOfImages <= 1) throw new BadMessageException('joe');
 
         $imageManager->deleteImage($image);
         // We delete the main image, we must assign a new main image
@@ -104,7 +96,7 @@ class ImageController extends AbstractController
     }
 
     /**
-     * @Route("/image/delete/id", name="image_delete")
+     * @Route("/image/delete", name="image_delete")
      */
     public function deleteImage(ImageRepository $imageRepository, Request $request, ImageManager $imageManager): Response
     {
@@ -126,8 +118,7 @@ class ImageController extends AbstractController
         $form = $this->createForm(ImageType::class, $image);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid())
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
             foreach ($trick->getImages() as $image) {
                 $image->setTrick($trick);
                 $image->setCaption($image->getCaption());

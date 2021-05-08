@@ -6,9 +6,9 @@ use App\Entity\Comment;
 use App\Entity\Trick;
 use App\Form\TrickType;
 use App\Repository\TrickRepository;
-use App\Service\ImageManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,18 +18,13 @@ class TrickController extends AbstractController
     /**
      * @Route("/trick/{id}", name="trick")
      *
-     *
+     * @param Trick $trick
      * @return Response
      */
-    public function show(Trick $trick): Response
+    public function showTrick(Trick $trick): Response
     {
         $user = $this->getUser();
-
-        return $this->render('trick/index.html.twig',
-            [
-                'user' => $user,
-                'trick' => $trick
-            ]);
+        return $this->render('trick/index.html.twig', ['user' => $user, 'trick' => $trick]);
     }
 
     /**
@@ -38,7 +33,6 @@ class TrickController extends AbstractController
      * @param TrickRepository $trickRepository
      * @param EntityManagerInterface $entityManager
      * @param Request $request
-     *
      * @return Response
      */
     public function addComment(TrickRepository $trickRepository, EntityManagerInterface $entityManager, Request $request): Response
@@ -63,8 +57,11 @@ class TrickController extends AbstractController
 
     /**
      * @Route("/trick/create", name="trick_create")
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return Response
      */
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function newTrick(Request $request, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
 
@@ -85,26 +82,24 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/trick/edit", name="trick_edit")
+     * @Route("/trick/{id}/edit", name="trick_edit")
      *
+     * @param Trick $trick
+     * @param EntityManagerInterface $entityManager
+     * @param Request $request
+     * @return RedirectResponse|Response
      */
-    public function edit(Request $request, TrickRepository $trickRepository, EntityManagerInterface $entityManager)
+    public function editTrick(Trick $trick, EntityManagerInterface $entityManager, Request $request): Response
     {
-        $trickId = $request->query->get('id');
-        $trick = $trickRepository->findOneBy(['id' => $trickId]);
-
         $form = $this->createForm(TrickType::class, $trick);
+
+        // Remove unused part of form
         $form->remove('images');
         $form->remove('mainImage');
+
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $name = $form->get('name')->getData();
-            $description = $form->get('description')->getData();
-
-            $trick->setName($name);
-            $trick->setDescription($description);
-
+            $form->getData();
             $entityManager->persist($trick);
             $entityManager->flush();
 
@@ -115,43 +110,20 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/trick/edit-details", name="trick_details_edit")
+     * @Route("/trick/{id}/edit-details", name="trick_details_edit")                                      
      *
+     * @param Trick $trick
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return Response
      */
-    public function editInDetails(Request $request, TrickRepository $trickRepository, EntityManagerInterface $entityManager,
-                                  ImageManager $imageManager)
+    public function editInDetails(Trick $trick ,Request $request, EntityManagerInterface $entityManager): Response
     {
-        $trickId = $request->query->get('id');
-        $trick = $trickRepository->findOneBy(['id' => $trickId]);
-
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $name = $form->get('name')->getData();
-            $description = $form->get('description')->getData();
-
-            $trick->setName($name);
-            $trick->setDescription($description);
-
-            foreach ($trick->getImages() as $image) {
-                $image->setTrick($trick);
-                $image->setCaption($image->getCaption());
-                $image = $imageManager->saveImage($image);
-
-                $entityManager->persist($image);
-
-                $imageManager->crop($image);
-                $imageManager->resize($image);
-            }
-
-            foreach ($trick->getVideos() as $video) {
-
-                $video->setTrick($trick);
-                $video->setUrl($video->getUrl());
-                $entityManager->persist($video);
-            }
-
+            $form->getData();
             $entityManager->persist($trick);
             $entityManager->flush();
 

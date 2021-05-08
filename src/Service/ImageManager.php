@@ -3,7 +3,6 @@
 
 namespace App\Service;
 
-
 use App\Entity\Image;
 use Symfony\Component\Filesystem\Filesystem;
 

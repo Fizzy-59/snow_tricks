@@ -53,7 +53,7 @@
         </div> {# row #}
 
         <h3>Images</h3>
-        <a href="{{path('image_add') }}">Add images</a>
+        <a href="{{ path('image_add') }}">Add images</a>
         <div class="row">
             {% for image in trick.images %}
                 {% if image.id != trick.mainImage.id %}
