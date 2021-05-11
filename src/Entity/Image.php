@@ -68,7 +68,6 @@ class Image
         return $this->name;
     }
 
-
     public function getCaption(): ?string
     {
         return $this->caption;
