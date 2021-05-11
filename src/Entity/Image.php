@@ -68,17 +68,6 @@ class Image
         return $this->name;
     }
 
-    /**
-     * @ORM\PrePersist
-     *
-     * @return $this
-     */
-    public function setName(): self
-    {
-        $this->name = md5(uniqid()) . '.' . $this->file->guessExtension();
-
-        return $this;
-    }
 
     public function getCaption(): ?string
     {
@@ -192,4 +181,31 @@ class Image
         ImageManager::deleteImage($this);
         return $this;
     }
+
+    /**
+     * @ORM\PreUpdate
+     *
+     * @return $this
+     */
+    public function preUpdate(): self
+    {
+        if (!empty($this->file)) {
+            ImageManager::deleteImage($this);
+            $this->name = md5(uniqid()) . '.' . $this->file->guessExtension();
+        }
+
+        return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     *
+     * @return $this
+     */
+    public function prePersist(): self
+    {
+        $this->name = md5(uniqid()) . '.' . $this->file->guessExtension();
+        return $this;
+    }
+
 }
