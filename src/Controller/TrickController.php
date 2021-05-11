@@ -16,6 +16,33 @@ use Symfony\Component\Routing\Annotation\Route;
 class TrickController extends AbstractController
 {
     /**
+     * @Route("/trick/create", name="trick_create")
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
+    public function newTrick(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+
+        $trick = new Trick();
+        $form = $this->createForm(TrickType::class, $trick);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $trick = $form->getData();
+            $trick->setUser($user);
+            $entityManager->persist($trick);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('home');
+        }
+
+        return $this->render('trick/create.html.twig', ['form' => $form->createView()]);
+    }
+
+    /**
      * @Route("/trick/{id}", name="trick")
      *
      * @param Trick $trick
@@ -53,32 +80,6 @@ class TrickController extends AbstractController
         $entityManager->flush();
 
         return $this->redirect($this->generateUrl('trick', ['id' => $trick->getId()]));
-    }
-
-    /**
-     * @Route("/trick/create", name="trick_create")
-     * @param Request $request
-     * @param EntityManagerInterface $entityManager
-     * @return Response
-     */
-    public function newTrick(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $user = $this->getUser();
-
-        $trick = new Trick();
-        $form = $this->createForm(TrickType::class, $trick);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $trick = $form->getData();
-            $trick->setUser($user);
-            $entityManager->persist($trick);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('home');
-        }
-
-        return $this->render('trick/create.html.twig', ['form' => $form->createView()]);
     }
 
     /**
