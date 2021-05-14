@@ -1,6 +1,7 @@
 /* Container holding the image and the text */
-.container {
+.container_home {
     position: relative;
+    background-color: red;
 }
 
 /* Bottom right text */
