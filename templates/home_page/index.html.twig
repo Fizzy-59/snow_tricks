@@ -4,22 +4,25 @@
 
 {% block body %}
 
-    <a href="{{ path('trick_create') }}"><p class="card-text">"Create trick"</p></a>
-
-    <header style="background-image: url('https://via.placeholder.com/700')">
-        <div class="contents-header text-center">
-            <h1 class="header-title text-center">SnowTricks</h1>
-            <div style="margin-bottom: 3rem;" class="text-center">
-            </div>
+    {# Image full size #}
+    <div class="container_home">
+        <img src="https://via.placeholder.com/350x150" alt="Norway" style="width:100%;">
+        <div class="text-block">
+            <h4>Phrase accroche</h4>
         </div>
-    </header>
-
-    <div id="scroll_to_top">
-        <a href="#top"><img src="/assets/top-100x100.png" alt="Retourner en haut" /></a>
     </div>
 
+    {# Bottom arrow #}
+    <div id="scroll_to_bottom" class="arrow bounce">
+        <a class="fa fa-arrow-down fa-2x" href="#container-trick"></a>
+    </div>
 
-    <div class="container">
+    {# Upper arrow #}
+    <div id="scroll_to_top" class="arrow bounce">
+        <a class="fa fa-arrow-up fa-2x" href="#"></a>
+    </div>
+
+    <div id="container-trick" class="container">
         <div class="row">
 
             {% for trick in tricks %}
@@ -35,6 +38,8 @@
                     </div> {# card #}
                 </div>  {# col #}
             {% endfor %}
+
+            <a href="{{ path('trick_create') }}"><p class="card-text">"Create trick"</p></a>
 
         </div> {# row #}
     </div> {# container #}

@@ -172,7 +172,6 @@ img::-moz-selection {
 }
 
 header.masthead {
-    margin-bottom: 50px;
     background: no-repeat center center;
     background-color: #868e96;
     background-attachment: scroll;
@@ -191,15 +190,15 @@ header.masthead .overlay {
 }
 
 header.masthead .page-heading, header.masthead .post-heading, header.masthead .site-heading {
-    padding: 200px 0 150px;
+    padding: 50px 0 25px;
     color: #fff
 }
 
-@media only screen and (min-width: 768px) {
+/*@media only screen and (min-width: 768px) {
     header.masthead .page-heading, header.masthead .post-heading, header.masthead .site-heading {
         padding: 200px 0
     }
-}
+}*/
 
 header.masthead .page-heading, header.masthead .site-heading {
     text-align: center

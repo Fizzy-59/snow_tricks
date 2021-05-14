@@ -15,6 +15,7 @@
                     <a class="nav-link" href="{{ path('home') }}">Tricks</a>
                 </li>
 
+                {# Session inactive #}
                 {% if not app.user %}
                     <li class="nav-item">
                         <a class="nav-link"
@@ -32,25 +33,14 @@
                         <a class="nav-link" href="{{ path('logout') }}">Logout</a>
                     </li>
                 {% endif %}
-                {#
-                #}{# Session admin #}{#
-                {% if session.user.role ==  'ROLE_ADMIN' %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/dashboard"> |- Tableau de bord -|</a>
-                    </li>
-                {% endif %} #}
 
-                {# Session inactive #}
-                {# {% if not session.user %} #}
             </ul>
         </div>
     </div>
 </nav>
 
 <!-- Page Header -->
-<header class="masthead"
-        style="background-color black">
-    <div class="overlay"></div>
+<header class="masthead" style="background-color: black">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto ">

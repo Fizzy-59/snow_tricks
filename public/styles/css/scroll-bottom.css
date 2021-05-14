@@ -1,16 +1,21 @@
-#scroll_to_top {
+#scroll_to_bottom {
     position: fixed;
     width: 25px;
     height: 25px;
-    bottom: 150px;
+    bottom: 10px;
     right: 30px;
 }
-#scroll_to_top img {
+
+#scroll_to_bottom img {
     width: 25px;
 }
 
 a { color: black; text-decoration: none; }
 
+.arrow {
+    text-align: center;
+    margin: 8% 0;
+}
 .bounce {
     -moz-animation: bounce 2s infinite;
     -webkit-animation: bounce 2s infinite;
