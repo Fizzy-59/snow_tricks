@@ -16,6 +16,18 @@ use Symfony\Component\Routing\Annotation\Route;
 class TrickController extends AbstractController
 {
     /**
+     * @Route("/trick/{id}", name="trick", requirements={"id":"\d+"})
+     *
+     * @param Trick $trick
+     * @return Response
+     */
+    public function showTrick(Trick $trick): Response
+    {
+        $user = $this->getUser();
+        return $this->render('trick/index.html.twig', ['user' => $user, 'trick' => $trick]);
+    }
+
+    /**
      * @Route("/trick/create", name="trick_create")
      *
      * @param Request $request
@@ -40,18 +52,6 @@ class TrickController extends AbstractController
         }
 
         return $this->render('trick/create.html.twig', ['form' => $form->createView()]);
-    }
-
-    /**
-     * @Route("/trick/{id}", name="trick")
-     *
-     * @param Trick $trick
-     * @return Response
-     */
-    public function showTrick(Trick $trick): Response
-    {
-        $user = $this->getUser();
-        return $this->render('trick/index.html.twig', ['user' => $user, 'trick' => $trick]);
     }
 
     /**
