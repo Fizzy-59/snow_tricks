@@ -1,31 +1,36 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomePageController!{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block body %}
 
+    <a href="{{ path('trick_create') }}"><p class="card-text">"Create trick"</p></a>
 
     <header style="background-image: url('https://via.placeholder.com/700')">
         <div class="contents-header text-center">
             <h1 class="header-title text-center">SnowTricks</h1>
             <div style="margin-bottom: 3rem;" class="text-center">
             </div>
-            <div class="sub-title">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Provident dolor numquam ad ipsam corrupti impedit libero illum eius distinctio earum porro explicabo qui culpa, necessitatibus minus dolore tenetur beatae ratione!
-            </div>
         </div>
     </header>
+
+    <div id="scroll_to_top">
+        <a href="#top"><img src="/assets/top-100x100.png" alt="Retourner en haut" /></a>
+    </div>
+
 
     <div class="container">
         <div class="row">
 
             {% for trick in tricks %}
-                <div class="col-sm">
-                    <div class="card" style="width: 18rem;">
-                        <img src="{{ trick.images[0].path }}" class="card-img-top" alt="Image of Trick">
+                <div class="col-sm-2 m-1">
+                    <div class="card" style="width: 10rem">
+                        <img src="{{ asset(trick.mainImage.pathThumbnail ~ '/' ~ trick.mainImage.name) }}"
+                             class="card-img-top" alt="{{ trick.mainImage.caption }}">
                         <div class="card-body">
-                            <a href="{{ path('figure', {'id': trick.id }) }}"><p class="card-text">{{ trick.name }}</p></a>
-
+                            <a href="{{ path('trick', {'id': trick.id }) }}"><p class="card-text">{{ trick.name }}</p>
+                            </a>
+                            <a href="{{ path('trick_edit', {'id': trick.id }) }}"><p class="card-text">Edit</p></a>
                         </div> {# card-body #}
                     </div> {# card #}
                 </div>  {# col #}

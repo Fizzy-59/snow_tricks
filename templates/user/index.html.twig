@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}add-gravatar{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="row">
+            <div class="mx-auto">
+                <div class="col">
+
+                    <form method="post">
+
+                        <h1 class="text-center">Add Gravatar</h1>
+
+                        <div class="card text-center" style="width: 18rem;">
+                            <div class="card-body">
+
+                                <p class="card-text"><label>Add a gravatar to have a personalized profile photo in the
+                                        comment space.</label>
+
+                                </p>
+
+                                <a href="https://fr.gravatar.com/" target="_blank">Step 1: Add gravatar</a>
+                                <hr>
+                                <a href="{{ path('add_gravatar')}}">
+                                    <button class="btn btn-lg btn-primary" type="submit">
+                                        Step 2: Associate gravatar to your account
+                                    </button>
+                                </a>
+
+
+                            </div> {# card-body #}
+                        </div> {# card #}
+
+                    </form>
+                </div> {# col #}
+            </div> {# mx-auto #}
+        </div> {# row #}
+    </div> {# container #}
+
+{% endblock %}

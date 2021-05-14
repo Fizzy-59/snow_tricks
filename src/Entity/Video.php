@@ -36,7 +36,7 @@ class Video
     /**
      * @ORM\Column(type="datetime")
      */
-    private $creadtedAt;
+    private $createdAt;
 
     public function getId(): ?int
     {
@@ -50,8 +50,18 @@ class Video
 
     public function setUrl(string $url): self
     {
-        $this->url = $url;
+        $shortUrlRegex = '/youtu.be\/([a-zA-Z0-9_-]+)\??/i';
+        $longUrlRegex = '/youtube.com\/((?:embed)|(?:watch))((?:\?v\=)|(?:\/))([a-zA-Z0-9_-]+)/i';
 
+        if (preg_match($longUrlRegex, $url, $matches)) {
+            $youtube_id = $matches[count($matches) - 1];
+        }
+
+        if (preg_match($shortUrlRegex, $url, $matches)) {
+            $youtube_id = $matches[count($matches) - 1];
+        }
+
+        $this->url = 'https://www.youtube.com/embed/' . $youtube_id ;
         return $this;
     }
 
@@ -78,7 +88,7 @@ class Video
      */
     public function setUpdatedAt(): void
     {
-        $this->updatedAt =  $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getCreadtedAt(): ?\DateTimeInterface
@@ -91,6 +101,6 @@ class Video
      */
     public function setCreatedAt(): void
     {
-        $this->createdAt =  $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = new \DateTimeImmutable();
     }
 }

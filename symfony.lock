@@ -87,9 +87,6 @@
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.3"
     },
-    "fzaninotto/faker": {
-        "version": "v1.9.2"
-    },
     "laminas/laminas-code": {
         "version": "3.4.1"
     },
@@ -525,6 +522,21 @@
     },
     "symfony/yaml": {
         "version": "v5.2.3"
+    },
+    "symfonycasts/reset-password-bundle": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "97c1627c0384534997ae1047b93be517ca16de43"
+        },
+        "files": [
+            "config/packages/reset_password.yaml"
+        ]
+    },
+    "symfonycasts/verify-email-bundle": {
+        "version": "v1.3.0"
     },
     "twig/extra-bundle": {
         "version": "v3.3.0"
