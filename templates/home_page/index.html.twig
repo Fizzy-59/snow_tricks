@@ -5,43 +5,53 @@
 {% block body %}
 
     {# Image full size #}
-    <div class="container_home">
+    <div class="container_home ">
         <img src="https://via.placeholder.com/350x150" alt="Norway" style="width:100%;">
+
+        {# Bottom arrow #}
+        <div id="scroll_to_bottom" class="arrow bounce">
+            <a class="fa fa-arrow-down fa-2x" href="#container-trick"></a>
+        </div>
+
         <div class="text-block">
             <h4>Phrase accroche</h4>
         </div>
+
     </div>
 
-    {# Bottom arrow #}
-    <div id="scroll_to_bottom" class="arrow bounce">
-        <a class="fa fa-arrow-down fa-2x" href="#container-trick"></a>
-    </div>
-
-    {# Upper arrow #}
-    <div id="scroll_to_top" class="arrow bounce">
-        <a class="fa fa-arrow-up fa-2x" href="#"></a>
-    </div>
 
     <div id="container-trick" class="container">
         <div class="row">
 
             {% for trick in tricks %}
                 <div class="col-sm-2 m-1">
-                    <div class="card" style="width: 10rem">
+                    <div class="card" style="width: 12rem">
+
                         <img src="{{ asset(trick.mainImage.pathThumbnail ~ '/' ~ trick.mainImage.name) }}"
                              class="card-img-top" alt="{{ trick.mainImage.caption }}">
+
                         <div class="card-body">
-                            <a href="{{ path('trick', {'id': trick.id }) }}"><p class="card-text">{{ trick.name }}</p>
+                            <a href="{{ path('trick', {'id': trick.id }) }}">
+                                <p class="card-text">{{ trick.name }}
                             </a>
-                            <a href="{{ path('trick_edit', {'id': trick.id }) }}"><p class="card-text">Edit</p></a>
+
+                            <a href="{{ path('trick_edit', {'id': trick.id }) }}">✏ </a>️
+                            <a href="">🗑️️</a>
+                            </p>
                         </div> {# card-body #}
+
                     </div> {# card #}
                 </div>  {# col #}
             {% endfor %}
-
-            <a href="{{ path('trick_create') }}"><p class="card-text">"Create trick"</p></a>
-
         </div> {# row #}
+
+        {# Upper arrow #}
+        <div id="scroll_to_top" class="arrow bounce">
+            <a class="fa fa-arrow-up fa-2x" href="#container-trick"></a>
+        </div>
+
     </div> {# container #}
+
+    <a href="{{ path('trick_create') }}"><p class="card-text">"Create trick"</p></a>
 
 {% endblock %}

@@ -28,7 +28,7 @@ class TrickType extends AbstractType
             ->add('description', TextareaType::class, [
                 'label' => 'Description of Trick',
                 'constraints' => [
-                    new  Length(['min' => 5, 'max' => 200])]
+                    new  Length(['min' => 5, 'max' => 1000])]
             ])
 
             ->add('category', EntityType::class, ['label' => 'Category of trick',

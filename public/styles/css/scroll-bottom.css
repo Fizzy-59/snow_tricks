@@ -1,19 +1,11 @@
 #scroll_to_bottom {
-    position: fixed;
-    width: 25px;
-    height: 25px;
-    bottom: 10px;
-    right: 30px;
-}
-
-#scroll_to_bottom img {
-    width: 25px;
+    position: center; bottom: 100px; left: 100px
 }
 
 a { color: black; text-decoration: none; }
 
 .arrow {
-    text-align: center;
+    text-align: right;
     margin: 8% 0;
 }
 .bounce {
