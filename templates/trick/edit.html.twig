@@ -7,96 +7,101 @@
 
     <div class="container">
 
-    <a href="{{ path('trick_details_edit', {'id': trick.id }) }}"><p class="card-text">"Edit details trick"</p></a>
+        <a href="{{ path('trick_details_edit', {'id': trick.id }) }}"><p class="card-text">"Edit details trick"</p></a>
 
-    <div class="col-lg-7 col-md-10 mx-auto">
-        <h1>Modifier le trick : {{ trick.name }}</h1>
-        {{ form_start(form) }}
+        <div class="col-lg-7 col-md-10 mx-auto">
+            <h1>Modifier le trick : {{ trick.name }}</h1>
+            {{ form_start(form) }}
 
-        <div class="my-custom-class-for-errors">
-            {{ form_errors(form) }}
-        </div>
-
-        <div class="row">
-            <div class="col">
-                {{ form_label(form.name) }}
-                {{ form_widget(form.name) }}
+            <div class="my-custom-class-for-errors">
+                {{ form_errors(form) }}
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col">
-                {{ form_label(form.description) }}
-                {{ form_widget(form.description) }}
+            <div class="row">
+                <div class="col">
+                    {{ form_label(form.name) }}
+                    {{ form_widget(form.name) }}
+                </div>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col">
-                {{ form_label(form.category) }}
-                {{ form_widget(form.category) }}
+            <div class="row">
+                <div class="col">
+                    {{ form_label(form.description) }}
+                    {{ form_widget(form.description) }}
+                </div>
             </div>
-        </div>
 
-        <h3>Main Image</h3>
-        <div class="row">
-            <div class="col-sm">
-                <div class="card" style="width: 18rem;">
-                    <img src="{{ asset(trick.mainImage.pathThumbnail ~ '/' ~ trick.mainImage.name) }}"
-                         class="card-img-top" alt="{{ trick.mainImage.caption }}">
-                    <div class="card-body">
-                        <a href="{{ path('main_image_edit', {'id': trick.mainImage.id }) }}"><p class="card-text">
-                                Edit</p></a>
-                        <a href="{{ path('main_image_delete', {'id': trick.mainImage.id }) }}"><p class="card-text">
-                                Delete</p></a>
-                    </div> {# card-body #}
-                </div> {# col #}
-            </div> {# card #}
-        </div> {# row #}
+            <div class="row">
+                <div class="col">
+                    {{ form_label(form.category) }}
+                    {{ form_widget(form.category) }}
+                </div>
+            </div>
 
-        <h3>Images</h3>
-        <a href="{{ path('image_add') }}">Add images</a>
-        <div class="row">
-            {% for image in trick.images %}
-                {% if image.id != trick.mainImage.id %}
+            <h3>Main Image</h3>
+            <div class="row">
+                <div class="col-sm">
+                    <div class="card" style="width: 18rem;">
+                        <img src="{{ asset(trick.mainImage.pathThumbnail ~ '/' ~ trick.mainImage.name) }}"
+                             class="card-img-top" alt="{{ trick.mainImage.caption }}">
+                        <div class="card-body">
+                            <a href="{{ path('main_image_edit', {'id': trick.mainImage.id }) }}"><p class="card-text">
+                                    Edit</p></a>
+                            <a href="{{ path('main_image_delete', {'id': trick.mainImage.id }) }}"><p class="card-text">
+                                    Delete</p></a>
+                        </div> {# card-body #}
+                    </div> {# col #}
+                </div> {# card #}
+            </div> {# row #}
+
+            <h3>Images</h3>
+            <a href="{{ path('image_add') }}">Add images</a>
+            <div class="row">
+                {% for image in trick.images %}
+                    {% if image.id != trick.mainImage.id %}
+                        <div class="col-sm">
+                            <div class="card" style="width: 18rem;">
+                                <img src="{{ asset(image.pathThumbnail ~ '/' ~ image.name) }}" class="card-img-top"
+                                     alt="Image of Trick">
+                                <div class="card-body">
+                                    <a href="{{ path('image_edit', {'id': image.id }) }}"><p class="card-text">Edit</p>
+                                    </a>
+                                    <a href="{{ path('image_delete', {'id': image.id }) }}"><p class="card-text">
+                                            Delete</p>
+                                    </a>
+                                </div> {# card-body #}
+                            </div> {# col #}
+                        </div> {# card #}
+                    {% endif %}
+                {% endfor %}
+            </div> {# row #}
+
+            <h3>Video</h3>
+            <div class="row">
+                {% for video in trick.videos %}
                     <div class="col-sm">
                         <div class="card" style="width: 18rem;">
-                            <img src="{{ asset(image.pathThumbnail ~ '/' ~ image.name) }}" class="card-img-top"
-                                 alt="Image of Trick">
+                            <iframe width="560" height="315" src=" {{ video.url }}"
+                                    title="YouTube video player" frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen>
+                            </iframe>
                             <div class="card-body">
-                                <p>{{ image.name }}</p>
-                                <a href="{{ path('image_edit', {'id': image.id }) }}"><p class="card-text">Edit</p></a>
-                                <a href="{{ path('image_delete', {'id': image.id }) }}"><p class="card-text">Delete</p>
+                                <a href="{{ path('video_edit', {'id': video.id }) }}"><p class="card-text">Edit</p></a>
+                                <a href="{{ path('video_delete', {'id': video.id }) }}"><p class="card-text">Delete</p>
                                 </a>
                             </div> {# card-body #}
                         </div> {# col #}
                     </div> {# card #}
-                {% endif %}
-            {% endfor %}
-        </div> {# row #}
+                {% endfor %}
+            </div> {# row #}
 
-        <h3>Video</h3>
-        <div class="row">
-            {% for video in trick.videos %}
-                <div class="col-sm">
-                    <div class="card" style="width: 18rem;">
-                        <iframe width="560" height="315" src=" {{ video.url }} "
-                                title="YouTube video player" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen>
-                        </iframe>
-                        <div class="card-body">
-                            <a href="{{ path('video_edit', {'id': video.id }) }}"><p class="card-text">Edit</p></a>
-                            <a href="{{ path('video_delete', {'id': video.id }) }}"><p class="card-text">Edit</p></a>
-                        </div> {# card-body #}
-                    </div> {# col #}
-                </div> {# card #}
-            {% endfor %}
-        </div> {# row #}
+            {{ form_row(form.videos) }}
 
 
-        <button type="submit" class="btn btn-success btn-lg col-12"><i class="fas fa-check"></i> UPDATE TRICK</button>
-        {{ form_end(form) }}
-    </div>
+            <button type="submit" class="btn btn-success btn-lg col-12"><i class="fas fa-check"></i> UPDATE TRICK
+            </button>
+            {{ form_end(form) }}
+        </div>
     </div>
 {% endblock %}

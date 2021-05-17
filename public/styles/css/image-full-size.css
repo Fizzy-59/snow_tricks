@@ -1,6 +1,10 @@
 /* Container holding the image and the text */
 .container_home {
-    position: relative;
+    background-image: url("https://via.placeholder.com/350x150");
+    position: absolute;
+    width: 100vw;
+    height: calc(100vh - 67px);
+    background-size: cover;
 }
 
 /* Bottom right text */
@@ -9,4 +13,8 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+#container-trick {
+    margin-top: 100vh;
 }
