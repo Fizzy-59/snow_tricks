@@ -7,43 +7,15 @@
     <div class="container">
 
     {# MAIN IMAGE #}
-    <div class="row p-4">
-        <div class="col">
-            <img src="{{ asset(trick.mainImage.pathThumbnail ~ '/' ~ trick.mainImage.name) }}"
-                 class="card-img-top" alt="{{ trick.mainImage.caption }}">
-            <div class="card-body">
-            </div> {# card-body #}
-        </div> {# col #}
-    </div> {# row #}
-    <hr>
+    {% include 'trick/main-image.html.twig' %}
 
-    {# IMAGES #}
     <div class="row">
-        {% for image in trick.images %}
-            {% if image.id != trick.mainImage.id %}
-                <div class="col">
-                    <div class="card" style="width: 20rem; height: 15rem; border: white">
-                        <img src="{{ asset(image.pathThumbnail ~ '/' ~ image.name) }}" class="card-img-top"
-                             alt="Image of Trick">
-                    </div> {# col #}
-                </div> {# card #}
-            {% endif %}
-        {% endfor %}
+    {# IMAGES #}
+        {% include'trick/images.html.twig' %}
+
 
         {# VIDEOS #}
-        {% for video in trick.videos %}
-            <div class="col">
-                <div class="card" style="width: 20rem; height: 15rem; border: white">
-                    <iframe width="320" height="320" src=" {{ video.url }} "
-                            title="YouTube video player" frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen>
-                    </iframe>
-                    <div class="card-body">
-                    </div> {# card-body #}
-                </div> {# col #}
-            </div> {# card #}
-        {% endfor %}
+        {% include 'trick/videos.html.twig' %}
     </div> {# row #}
 
     <div class="row">

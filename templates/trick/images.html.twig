@@ -1,0 +1,11 @@
+
+    {% for image in trick.images %}
+    {% if image.id != trick.mainImage.id %}
+        <div class="col">
+            <div class="card" style="width: 20rem; height: 15rem; border: white">
+                <img src="{{ asset(image.pathThumbnail ~ '/' ~ image.name) }}" class="card-img-top"
+                     alt="Image of Trick">
+            </div> {# col #}
+        </div> {# card #}
+    {% endif %}
+{% endfor %}

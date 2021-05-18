@@ -22,6 +22,8 @@
                     <h3>Main Image</h3>
                     {{ form_row(form.mainImage) }}
 
+
+
                     <h3>Images</h3>
                     <ul class="images" data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}">
                         {% for image in form.images %}
