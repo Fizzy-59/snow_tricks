@@ -94,10 +94,6 @@ class TrickController extends AbstractController
     {
         $form = $this->createForm(TrickType::class, $trick);
 
-        // Remove unused part of form
-        $form->remove('images');
-        $form->remove('mainImage');
-
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $form->getData();

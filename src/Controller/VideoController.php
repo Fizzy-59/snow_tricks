@@ -14,6 +14,11 @@ class VideoController extends AbstractController
 {
     /**
      * @Route("/edit/video", name="video_edit")
+     *
+     * @param VideoRepository $videoRepository
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return Response
      */
     public function edit(VideoRepository $videoRepository, Request $request, EntityManagerInterface $entityManager): Response
     {
