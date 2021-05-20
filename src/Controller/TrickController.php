@@ -36,6 +36,7 @@ class TrickController extends AbstractController
      */
     public function newTrick(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
         $user = $this->getUser();
 
         $trick = new Trick();
@@ -64,6 +65,7 @@ class TrickController extends AbstractController
      */
     public function addComment(TrickRepository $trickRepository, EntityManagerInterface $entityManager, Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
         $user = $this->getUser();
 
         $request = $request->request->all();
@@ -92,6 +94,7 @@ class TrickController extends AbstractController
      */
     public function editTrick(Trick $trick, EntityManagerInterface $entityManager, Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
         $form = $this->createForm(TrickType::class, $trick);
 
         $form->handleRequest($request);
@@ -104,30 +107,6 @@ class TrickController extends AbstractController
         }
 
         return $this->render('trick/edit.html.twig', ['form' => $form->createView(), 'trick' => $trick]);
-    }
-
-    /**
-     * @Route("/trick/{id}/edit-details", name="trick_details_edit")                                      
-     *
-     * @param Trick $trick
-     * @param Request $request
-     * @param EntityManagerInterface $entityManager
-     * @return Response
-     */
-    public function editInDetails(Trick $trick ,Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(TrickType::class, $trick);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $form->getData();
-            $entityManager->persist($trick);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('home');
-        }
-
-        return $this->render('trick/edit_details.html.twig', ['form' => $form->createView(), 'trick' => $trick]);
     }
 }
 

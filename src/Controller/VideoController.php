@@ -22,6 +22,8 @@ class VideoController extends AbstractController
      */
     public function edit(VideoRepository $videoRepository, Request $request, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $videoId = $request->query->get('id');
         $video = $videoRepository->findOneBy(['id' => $videoId]);
 
@@ -46,6 +48,8 @@ class VideoController extends AbstractController
      */
     public function delete(VideoRepository $videoRepository, Request $request, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $videoId = $request->query->get('id');
         $video = $videoRepository->findOneBy(['id' => $videoId]);
         $entityManager->remove($video);

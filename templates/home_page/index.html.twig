@@ -32,8 +32,11 @@
                                 <p class="card-text">{{ trick.name }}
                             </a>
 
-                            <a href="{{ path('trick_edit', {'id': trick.id }) }}">✏ </a>️
-                            <a href="">🗑️️</a>
+                            {% if app.user %}
+                                <a href="{{ path('trick_edit', {'id': trick.id }) }}">✏ </a>️
+                                <a href="">🗑️️</a>
+                            {% endif %}
+
                             </p>
                         </div> {# card-body #}
 
@@ -44,8 +47,10 @@
         </div> {# row #}
     </div> {# container #}
 
-    {# Upper arrow #}
-    <a id="scroll_to_top" class="fa fa-arrow-up fa-2x bounce" href="#container-trick"></a>
+    {% if tricks < 15 %}
+        {# Upper arrow #}
+        <a id="scroll_to_top" class="fa fa-arrow-up fa-2x bounce" href="#container-trick"></a>
+    {% endif %}
 
 
     <a href="{{ path('trick_create') }}"><p class="card-text">"Create trick"</p></a>
