@@ -21,8 +21,8 @@
         <div class="row">
 
             {% for trick in tricks %}
-                <div class="col-sm-2 m-1">
-                    <div class="card" style="width: 12rem">
+                <div class="col-lg-3 p-1">
+                    <div class="card">
 
                         <img src="{{ asset(trick.mainImage.pathThumbnail ~ '/' ~ trick.mainImage.name) }}"
                              class="card-img-top" alt="{{ trick.mainImage.caption }}">
