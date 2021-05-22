@@ -9,6 +9,7 @@
 
     <div class="container pb-2">
         {{ form_start(form) }}
+        {{ form_errors(form) }}
 
         {# MAIN IMAGE #}
         {% include 'trick/main-image.html.twig' %}
@@ -57,10 +58,9 @@
                 <button type="" class="btn btn-danger btn-lg"><i class="fas fa-check"></i> DELETE TRICK
                 </button>
             </a>
-
         </div>
 
-
-        {{ form_end(form, {'render_rest': false}) }}
+        {{ form_row(form._token) }}
+        {{ form_end(form) }}
     </div>
 {% endblock %}

@@ -57,6 +57,7 @@ class TrickController extends AbstractController
             $entityManager->persist($trick);
             $entityManager->flush();
 
+            $this->addFlash('success' ,'Trick added successfully');
             return $this->redirectToRoute('home');
         }
 
@@ -104,6 +105,7 @@ class TrickController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
         $form = $this->createForm(TrickType::class, $trick);
+        $form->remove('mainImage');
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
