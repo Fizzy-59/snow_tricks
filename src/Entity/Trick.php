@@ -28,12 +28,14 @@ class Trick
     /**
      * @ORM\Column(type="string", length=100)
      * @Assert\Length(max=100, maxMessage="The name must not be more than 100 characters")
+     * @Assert\Length(min=3, minMessage="The name must be at least 3 characters long")
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
      * @Assert\Length(min=20, minMessage="Description must be at least 20 characters long")
+     * @Assert\Length(max=100, maxMessage="Description must not be more than 700 characters")
      */
     private $description;
 

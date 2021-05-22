@@ -33,6 +33,8 @@ class Image
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
+     * @Assert\Length(max=100, maxMessage="The caption must not be more than 100 characters")
+     * @Assert\Length(min=3, minMessage="The caption must be at least 3 characters long")
      */
     private $caption;
 
