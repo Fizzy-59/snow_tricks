@@ -4,26 +4,38 @@
 
 {% block body %}
 
-    <div class="container">
+    <div class="container p-2">
+        <div class="row">
+            <div class="mx-auto">
+                <div class="col-sm">
 
-    <div class="row">
-        <div class="col-sm">
-            <div class="card" style="width: 18rem;">
-                <img src="{{ asset(image.pathThumbnail ~ '/' ~ image.name) }}"
-                     class="card-img-top" alt="{{ image.caption }}">
-                <div class="card-body">
-                </div> {# card-body #}
-            </div> {# col #}
-        </div> {# card #}
-    </div> {# row #}
+                    <div class="card" style=" border: white">
+                        <img src="{{ asset(image.pathThumbnail ~ '/' ~ image.name) }}"
+                             class="card-img-top" alt="{{ image.caption }}">
+                        <div class="card-body">
 
-    {{ form_start(form) }}
-        {{ form_row(form.name) }}
-        {{ form_row(form.caption) }}
 
-        <button type="submit" class="btn btn-success btn-lg col-12"><i class="fas fa-check"></i> UPDATE IMAGE</button>
+                            {{ form_start(form) }}
+                            {{ form_row(form.caption) }}
+                            {{ form_row(form.file) }}
 
-    {{ form_end(form) }}
+                            <div class="row p-4">
+                                <div class="col">
+                                    <button type="submit" class="btn btn-success btn-lg col-12 "><i class="fas fa-check"></i>
+                                        UPDATE
+                                    </button>
+                                </div>
 
+
+                            </div>
+                            {{ form_end(form) }}
+
+                        </div> {# card-body #}
+                    </div> {# card #}
+
+                </div> {# col #}
+            </div> {# mx-auto #}
+        </div> {# row #}
     </div> {# container #}
+
 {% endblock %}

@@ -1,0 +1,17 @@
+.card-top {
+    position: relative;
+}
+
+.card-top .actions {
+    background: white;
+    padding: 2px;
+    position: absolute;
+    top: 3px;
+    right: 3px;
+}
+
+.video-modify-delete {
+    position: absolute;
+    right: 3px;
+    bottom: 3px;
+}

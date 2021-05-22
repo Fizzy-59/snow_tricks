@@ -4,39 +4,53 @@
 
 {% block body %}
 
-    <a href="{{ path('trick_create') }}"><p class="card-text">"Create trick"</p></a>
+    {# Image full size #}
+    <div class="container_home ">
 
-    <header style="background-image: url('https://via.placeholder.com/700')">
-        <div class="contents-header text-center">
-            <h1 class="header-title text-center">SnowTricks</h1>
-            <div style="margin-bottom: 3rem;" class="text-center">
-            </div>
+        {# Bottom arrow #}
+        <a id="scroll_to_bottom" class="fa fa-arrow-down fa-2x bounce" href="#container-trick"></a>
+
+        <div class="text-block">
+            <h4>YOUR TRICK | YOUR BUZZ </h4>
         </div>
-    </header>
 
-    <div id="scroll_to_top">
-        <a href="#top"><img src="/assets/top-100x100.png" alt="Retourner en haut" /></a>
     </div>
 
 
-    <div class="container">
+    <div id="container-trick" class="container pb-2">
         <div class="row">
 
             {% for trick in tricks %}
-                <div class="col-sm-2 m-1">
-                    <div class="card" style="width: 10rem">
+                <div class="col-lg-3 p-1">
+                    <div class="card">
+
                         <img src="{{ asset(trick.mainImage.pathThumbnail ~ '/' ~ trick.mainImage.name) }}"
                              class="card-img-top" alt="{{ trick.mainImage.caption }}">
+
                         <div class="card-body">
-                            <a href="{{ path('trick', {'id': trick.id }) }}"><p class="card-text">{{ trick.name }}</p>
+                            <a href="{{ path('trick', {'id': trick.id }) }}">
+                                <p class="card-text">{{ trick.name }}
                             </a>
-                            <a href="{{ path('trick_edit', {'id': trick.id }) }}"><p class="card-text">Edit</p></a>
+
+                            {% if app.user %}
+                                <a href="{{ path('trick_edit', {'id': trick.id }) }}">✏ </a>️
+                                <a href="{{ path('trick_delete', {'id': trick.id }) }}"
+                                   onclick="return confirm('are u sure?')">🗑️️</a>
+                            {% endif %}
+
+                            </p>
                         </div> {# card-body #}
+
                     </div> {# card #}
                 </div>  {# col #}
             {% endfor %}
 
         </div> {# row #}
     </div> {# container #}
+
+    {% if tricks < 15 %}
+        {# Upper arrow #}
+        <a id="scroll_to_top" class="fa fa-arrow-up fa-2x bounce" href="#container-trick"></a>
+    {% endif %}
 
 {% endblock %}

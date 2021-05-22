@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Comment;
 use App\Entity\Trick;
 use App\Form\TrickType;
+use App\Repository\CommentRepository;
 use App\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,10 +22,17 @@ class TrickController extends AbstractController
      * @param Trick $trick
      * @return Response
      */
-    public function showTrick(Trick $trick): Response
+    public function showTrick(Trick $trick, CommentRepository $commentRepository): Response
     {
         $user = $this->getUser();
-        return $this->render('trick/index.html.twig', ['user' => $user, 'trick' => $trick]);
+        $comments = $commentRepository->loadComments(1, 10, $trick);
+
+        return $this->render('trick/index.html.twig',
+            [
+                'user' => $user,
+                'trick' => $trick,
+                'comments' => $comments
+            ]);
     }
 
     /**
@@ -36,6 +44,7 @@ class TrickController extends AbstractController
      */
     public function newTrick(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
         $user = $this->getUser();
 
         $trick = new Trick();
@@ -64,6 +73,7 @@ class TrickController extends AbstractController
      */
     public function addComment(TrickRepository $trickRepository, EntityManagerInterface $entityManager, Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
         $user = $this->getUser();
 
         $request = $request->request->all();
@@ -92,11 +102,8 @@ class TrickController extends AbstractController
      */
     public function editTrick(Trick $trick, EntityManagerInterface $entityManager, Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
         $form = $this->createForm(TrickType::class, $trick);
-
-        // Remove unused part of form
-        $form->remove('images');
-        $form->remove('mainImage');
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -111,27 +118,41 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/trick/{id}/edit-details", name="trick_details_edit")                                      
+     * @Route("/trick/{id}/delete", name="trick_delete")
      *
      * @param Trick $trick
-     * @param Request $request
      * @param EntityManagerInterface $entityManager
+     * @param TrickRepository $trickRepository
      * @return Response
      */
-    public function editInDetails(Trick $trick ,Request $request, EntityManagerInterface $entityManager): Response
+    public function deleteTrick(Trick $trick, EntityManagerInterface $entityManager, TrickRepository $trickRepository): Response
     {
-        $form = $this->createForm(TrickType::class, $trick);
-        $form->handleRequest($request);
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        $entityManager->remove($trick);
+        $entityManager->flush();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $form->getData();
-            $entityManager->persist($trick);
-            $entityManager->flush();
+        $tricks = $trickRepository->findAll();
+        return $this->render('home_page/index.html.twig', ['tricks' => $tricks]);
+    }
 
-            return $this->redirectToRoute('home');
-        }
+    /**
+     * @Route("/trick/{id}/load-more", name="trick_load_more", requirements={"id":"\d+"})
+     *
+     * @param Trick $trick
+     * @param CommentRepository $commentRepository
+     * @return Response
+     */
+    public function loadMore(Trick $trick, CommentRepository $commentRepository): Response
+    {
+        $user = $this->getUser();
+        $comments = $commentRepository->loadMore($trick);
 
-        return $this->render('trick/edit_details.html.twig', ['form' => $form->createView(), 'trick' => $trick]);
+        return $this->render('trick/index.html.twig',
+            [
+                'user' => $user,
+                'trick' => $trick,
+                'comments' => $comments
+            ]);
     }
 }
 

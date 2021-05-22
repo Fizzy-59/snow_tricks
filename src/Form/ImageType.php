@@ -18,9 +18,17 @@ class ImageType extends AbstractType
     {
         $builder
             ->add('caption', TextType::class, ["label" => "Description of image",
-                'constraints' => new Length(['min' => 5, 'max' => 200])
+                'label_attr' => ['class' => 'form-label'],
+                'attr' => ['class' => 'form-control'],
+                'row_attr' => ['class' => 'form-group'],
+                'constraints' => new Length(['min' => 5, 'max' => 700])
             ])
-            ->add('file', FileType::class, ["label" => "File of image"])
+            ->add('file', FileType::class, ["label" => "File of image",
+                'label_attr' => ['class' => 'form-label'],
+                'attr' => ['class' => 'form-control'],
+                'row_attr' => ['class' => 'form-group'],
+                ],
+            )
         ;
     }
 
