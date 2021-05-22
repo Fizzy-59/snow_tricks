@@ -35,7 +35,6 @@ class TrickController extends AbstractController
             ]);
     }
 
-
     /**
      * @Route("/trick/create", name="trick_create")
      *
@@ -134,6 +133,26 @@ class TrickController extends AbstractController
 
         $tricks = $trickRepository->findAll();
         return $this->render('home_page/index.html.twig', ['tricks' => $tricks]);
+    }
+
+    /**
+     * @Route("/trick/{id}/load-more", name="trick_load_more", requirements={"id":"\d+"})
+     *
+     * @param Trick $trick
+     * @param CommentRepository $commentRepository
+     * @return Response
+     */
+    public function loadMore(Trick $trick, CommentRepository $commentRepository): Response
+    {
+        $user = $this->getUser();
+        $comments = $commentRepository->loadMore($trick);
+
+        return $this->render('trick/index.html.twig',
+            [
+                'user' => $user,
+                'trick' => $trick,
+                'comments' => $comments
+            ]);
     }
 }
 

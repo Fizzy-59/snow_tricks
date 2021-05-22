@@ -34,5 +34,16 @@ class CommentRepository extends ServiceEntityRepository
         return $qb->getResult();
     }
 
+    public function loadMore(Trick $trick)
+    {
+        $qb = $this->createQueryBuilder('c')
+            ->where('c.trick = :trick')
+            ->setParameter('trick', $trick)
+            ->orderBy('c.createdAt', 'DESC')
+            ->getQuery();
+
+        return $qb->getResult();
+    }
+
 
 }

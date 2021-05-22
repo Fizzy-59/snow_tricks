@@ -10,7 +10,7 @@
     {% include 'trick/main-image.html.twig' %}
 
     <div class="row">
-    {# IMAGES #}
+        {# IMAGES #}
         {% include'trick/images.html.twig' %}
 
 
@@ -54,6 +54,12 @@
 
     {# Comment #}
     {% include 'trick/comment.html.twig' %}
+    <div class="row">
+        <a class="mx-auto" href="{{ path('trick_load_more', {'id': trick.id }) }}">
+            <button type="button" class="btn btn-info">Load More</button>
+        </a>
+
+    </div>
 
     </div>{# container #}
 

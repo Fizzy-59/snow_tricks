@@ -52,6 +52,8 @@
                     <img src="{{ comment.user.gravatar }}" class="align-self-start mr-0 rounded-circle"
                          style="height: 75px"
                          alt="profile picture of user">
+
+                 {# User din't have gravatar #}
                 {% else %}
                     <a href="{{ path('add_gravatar') }}">
                         <img src="https://i.imgur.com/yTFUilP.jpg"
@@ -83,4 +85,4 @@
         </div>
     {% endfor %}
 
-        {{ include('/utils/pagination.html.twig') }}
+
