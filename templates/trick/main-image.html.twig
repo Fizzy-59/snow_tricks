@@ -6,7 +6,8 @@
             {% if app.user %}
                 <div class="actions">
                     <a href="{{ path('main_image_edit', {'id': trick.mainImage.id} ) }}">✏ </a>️
-                    <a href="{{ path('main_image_delete', {'id': trick.mainImage.id} ) }}">🗑️️</a>
+                    <a href="{{ path('main_image_delete', {'id': trick.mainImage.id} ) }}"
+                       onclick="return confirm('are u sure?')">🗑️️</a>
                 </div>
             {% endif %}
 

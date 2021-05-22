@@ -108,5 +108,23 @@ class TrickController extends AbstractController
 
         return $this->render('trick/edit.html.twig', ['form' => $form->createView(), 'trick' => $trick]);
     }
+
+    /**
+     * @Route("/trick/{id}/delete", name="trick_delete")
+     *
+     * @param Trick $trick
+     * @param EntityManagerInterface $entityManager
+     * @param TrickRepository $trickRepository
+     * @return Response
+     */
+    public function deleteTrick(Trick $trick, EntityManagerInterface $entityManager, TrickRepository $trickRepository): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        $entityManager->remove($trick);
+        $entityManager->flush();
+
+        $tricks = $trickRepository->findAll();
+        return $this->render('home_page/index.html.twig', ['tricks' => $tricks]);
+    }
 }
 

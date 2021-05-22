@@ -34,7 +34,8 @@
 
                             {% if app.user %}
                                 <a href="{{ path('trick_edit', {'id': trick.id }) }}">✏ </a>️
-                                <a href="">🗑️️</a>
+                                <a href="{{ path('trick_delete', {'id': trick.id }) }}"
+                                   onclick="return confirm('are u sure?')">🗑️️</a>
                             {% endif %}
 
                             </p>
