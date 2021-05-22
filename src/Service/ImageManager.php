@@ -108,7 +108,7 @@ class ImageManager
         $extension = pathinfo($fullPath, PATHINFO_EXTENSION);
         $savingFullPath = $image->getPath() . '/thumbnail/' . $image->getName();
         $newWidth = 500;
-        $newHeight = 281.25;
+        $newHeight = 280;
 
         if ($extension === 'jpeg' || $extension === 'jpg') {
             $originalImg = imagecreatefromjpeg($fullPath);

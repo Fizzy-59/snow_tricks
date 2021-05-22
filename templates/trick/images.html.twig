@@ -1,18 +1,19 @@
 {% for image in trick.images %}
     {% if image.id != trick.mainImage.id %}
         <div class="col">
-            <div class="card" style="width: 20rem; height: 15rem; border: white">
+            <div class="card-top" style="width: 20rem; height: 15rem; border: white">
+
+                {% if app.user %}
+                    <div class="actions">
+                        <a href="{{ path('image_edit') }}">✏ </a>️
+                        <a href="{{ path('image_delete') }}">🗑️️</a>
+                    </div>
+                {% endif %}
+
                 <img src="{{ asset(image.pathThumbnail ~ '/' ~ image.name) }}" class="card-img-top"
                      alt="Image of Trick">
 
-                {% if app.user %}
-                    <div id="modify-delete">
-                    <a href="">✏ </a>️
-                    <a href="">🗑️️</a>
-                    </div>
-
-                {% endif %}
             </div> {# card #}
-        </div> {# col #}}
+        </div> {# col #}
     {% endif %}
 {% endfor %}
