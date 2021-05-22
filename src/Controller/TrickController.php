@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Comment;
 use App\Entity\Trick;
 use App\Form\TrickType;
+use App\Repository\CommentRepository;
 use App\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,11 +22,17 @@ class TrickController extends AbstractController
      * @param Trick $trick
      * @return Response
      */
-    public function showTrick(Trick $trick): Response
+    public function showTrick(Trick $trick, CommentRepository $commentRepository): Response
     {
         $user = $this->getUser();
-        return $this->render('trick/index.html.twig', ['user' => $user, 'trick' => $trick]);
+        $comments = $commentRepository->loadComments(1, 10, $trick);
+
+        return $this->render('trick/index.html.twig',
+            [
+                'user' => $user, 'trick' => $trick, 'comments' => $comments
+            ]);
     }
+
 
     /**
      * @Route("/trick/create", name="trick_create")

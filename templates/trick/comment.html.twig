@@ -44,7 +44,7 @@
 
 <br>
 {# Comment #}
-    {% for comment in trick.comments %}
+    {% for comment in comments %}
         <div class="row p-1">
 
             <div class="col-2 align-self-center text-center">
@@ -82,3 +82,5 @@
 
         </div>
     {% endfor %}
+
+        {{ include('/utils/pagination.html.twig') }}
