@@ -29,7 +29,9 @@ class TrickController extends AbstractController
 
         return $this->render('trick/index.html.twig',
             [
-                'user' => $user, 'trick' => $trick, 'comments' => $comments
+                'user' => $user,
+                'trick' => $trick,
+                'comments' => $comments
             ]);
     }
 

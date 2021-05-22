@@ -1,11 +1,15 @@
 {% for image in trick.images %}
     {% if image.id != trick.mainImage.id %}
-        <div class="col">
+
+        <button onClick="toggleMedia()" class="w-100 mb-10 small-size p-1 btn btn-warning">See medias</button>
+
+
+        <div id="hide-mini-image" class="col hidden p-1">
             <div class="card-top" style="width: 20rem; height: 15rem; border: white">
 
                 {% if app.user %}
                     <div class="actions">
-                        <a href="{{ path('image_edit', {'id': image.id} ) }}" >✏ </a>️
+                        <a href="{{ path('image_edit', {'id': image.id} ) }}">✏ </a>️
                         <a href="{{ path('image_delete', {'id': image.id} ) }}"
                            onclick="return confirm('are u sure?')">🗑️️</a>
                     </div>
