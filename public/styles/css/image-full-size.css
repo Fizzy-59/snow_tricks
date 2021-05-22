@@ -1,13 +1,12 @@
 /* Container holding the image and the text */
 .container_home {
-    background-image: url("https://via.placeholder.com/350x150");
+    background-image: url("/assets/home-image.jpg");
     position: absolute;
     width: 100vw;
     height: calc(100vh - 67px);
     background-size: cover;
 }
 
-/* Bottom right text */
 .text-block {
     position: absolute;
     top: 50%;

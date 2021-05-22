@@ -1,5 +1,11 @@
 <div class="row p-4">
     <div class="col">
+
+        {% if app.user %}
+            <a href="">✏ </a>️
+            <a href="">🗑️️</a>
+        {% endif %}
+
         <img src="{{ asset(trick.mainImage.pathThumbnail ~ '/' ~ trick.mainImage.name) }}"
              class="card-img-top" alt="{{ trick.mainImage.caption }}">
         <div class="card-body">
