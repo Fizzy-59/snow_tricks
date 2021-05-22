@@ -12,8 +12,8 @@
 
             {% if app.user %}
                 <div class="video-modify-delete">
-                    <a href="{{ path('video_edit') }}">✏ </a>️
-                    <a href="{{ path('video_delete') }}">🗑️️</a>
+                    <a href="{{ path('video_edit', {'id': video.id} ) }}">✏ </a>️
+                    <a href="{{ path('video_delete', {'id': video.id} ) }}">🗑️️</a>
                 </div>
             {% endif %}
 

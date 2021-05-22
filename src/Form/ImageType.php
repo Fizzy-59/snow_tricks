@@ -23,7 +23,12 @@ class ImageType extends AbstractType
                 'row_attr' => ['class' => 'form-group'],
                 'constraints' => new Length(['min' => 5, 'max' => 700])
             ])
-            ->add('file', FileType::class, ["label" => "File of image"])
+            ->add('file', FileType::class, ["label" => "File of image",
+                'label_attr' => ['class' => 'form-label'],
+                'attr' => ['class' => 'form-control'],
+                'row_attr' => ['class' => 'form-group'],
+                ],
+            )
         ;
     }
 
