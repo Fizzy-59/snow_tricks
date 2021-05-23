@@ -54,10 +54,13 @@
 
     {# Comment #}
     {% include 'trick/comment.html.twig' %}
+
+    {% if trick.comments.count > 0 %}
     <div class="row">
         <a class="mx-auto" href="{{ path('trick_load_more', {'id': trick.id }) }}">
             <button type="button" class="btn btn-info">Load More</button>
         </a>
+    {% endif %}
 
     </div>
 
