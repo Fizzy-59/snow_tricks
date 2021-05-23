@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ImageType extends AbstractType
 {
@@ -21,6 +22,10 @@ class ImageType extends AbstractType
                 'label_attr' => ['class' => 'form-label'],
                 'attr' => ['class' => 'form-control'],
                 'row_attr' => ['class' => 'form-group'],
+                'constraints' => [
+                    new NotBlank(),
+                    new Length(['min' => 3, 'max' => 30])
+                ]
             ])
             ->add('file', FileType::class, ["label" => "File of image",
                 'label_attr' => ['class' => 'form-label'],

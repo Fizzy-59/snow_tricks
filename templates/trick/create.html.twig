@@ -25,7 +25,8 @@
                     {{ form_row(form.category) }}
 
                     <button class="btn btn-primary">Create Trick</button>
-                    {{ form_end(form)}}
+                    {{ form_row(form._token) }}
+                    {{ form_end(form, {'render_rest': false}) }}
 
                 </div> {# col #}
             </div> {# mx-auto #}
