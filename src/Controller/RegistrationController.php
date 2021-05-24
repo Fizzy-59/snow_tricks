@@ -47,7 +47,7 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $gravatarUrl = 'http://www.gravatar.com/avatar/' . md5($user->getUsername()) . '?s=32';;
+            $gravatarUrl = 'http://www.gravatar.com/avatar/' . md5($user->getUsername()) . '?s=32';
             $user->setGravatar($gravatarUrl);
             $entityManager->persist($user);
             $entityManager->flush();
@@ -60,7 +60,6 @@ class RegistrationController extends AbstractController
                     ->subject('Please Confirm your Email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
-            // do anything else you need here, like send an email
 
             return $this->redirectToRoute('home');
         }
@@ -98,6 +97,6 @@ class RegistrationController extends AbstractController
 
         $this->addFlash('success', 'Your email address has been verified.');
 
-        return $this->redirectToRoute('register');
+        return $this->redirectToRoute('login');
     }
 }

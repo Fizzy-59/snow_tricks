@@ -52,7 +52,7 @@ class User implements UserInterface
     private $comments;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\Length(min=3, minMessage="The username must be at least 3 characters long")
      * @Assert\Length(max=30, maxMessage="The username must not be more than 100 characters")
      */
