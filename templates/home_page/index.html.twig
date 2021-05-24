@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+
+    {# Image full size #}
+    <div class="container_home ">
+
+        {# Bottom arrow #}
+        <a id="scroll_to_bottom" class="fa fa-arrow-down fa-2x bounce" href="#container-trick"></a>
+
+        <div class="text-block">
+            <h4>YOUR TRICK | YOUR BUZZ </h4>
+        </div>
+
+    </div>
+
+
+    <div id="container-trick" class="container pb-2">
+        <div class="row">
+
+            {% for trick in tricks %}
+                <div class="col-lg-3 p-1">
+                    <div class="card">
+
+                        <img src="{{ asset(trick.mainImage.pathThumbnail ~ '/' ~ trick.mainImage.name) }}"
+                             class="card-img-top" alt="{{ trick.mainImage.caption }}">
+
+                        <div class="card-body">
+                            <a href="{{ path('trick', {'slug': trick.slug }) }}">
+                                <p class="card-text">{{ trick.name }}
+                            </a>
+
+                            {% if app.user %}
+                                <a href="{{ path('trick_edit', {'slug': trick.slug }) }}">✏ </a>️
+                                <a href="{{ path('trick_delete', {'id': trick.id }) }}"
+                                   onclick="return confirm('are u sure?')">🗑️️</a>
+                            {% endif %}
+
+                            </p>
+                        </div> {# card-body #}
+
+                    </div> {# card #}
+                </div>  {# col #}
+            {% endfor %}
+
+        </div> {# row #}
+    </div> {# container #}
+
+    {% if tricks < 15 %}
+        {# Upper arrow #}
+        <a id="scroll_to_top" class="fa fa-arrow-up fa-2x bounce" href="#container-trick"></a>
+    {% endif %}
+
+{% endblock %}

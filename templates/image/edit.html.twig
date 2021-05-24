@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Image{% endblock %}
+
+{% block body %}
+
+    <div class="container p-2">
+        <div class="row">
+            <div class="mx-auto">
+                <div class="col-sm">
+
+                    <div class="card" style=" border: white">
+                        <img src="{{ asset(image.pathThumbnail ~ '/' ~ image.name) }}"
+                             class="card-img-top" alt="{{ image.caption }}">
+                        <div class="card-body">
+
+
+                            {{ form_start(form) }}
+                            {{ form_row(form.caption) }}
+                            {{ form_row(form.file) }}
+
+                            <div class="row p-4">
+                                <div class="col">
+                                    <button type="submit" class="btn btn-success btn-lg col-12 "><i class="fas fa-check"></i>
+                                        UPDATE
+                                    </button>
+                                </div>
+
+
+                            </div>
+                            {{ form_end(form) }}
+
+                        </div> {# card-body #}
+                    </div> {# card #}
+
+                </div> {# col #}
+            </div> {# mx-auto #}
+        </div> {# row #}
+    </div> {# container #}
+
+{% endblock %}

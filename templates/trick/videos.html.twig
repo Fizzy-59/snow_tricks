@@ -1,0 +1,21 @@
+{% for video in trick.videos %}
+    <div id="hide-mini-video" class="col hidden">
+        <div  class="card" style="width: 20rem; height: 15rem; border: white">
+
+            <iframe width="320" height="320" src=" {{ video.url }} "
+                    title="YouTube video player"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+            </iframe>
+
+            {% if app.user %}
+                <div class="video-modify-delete">
+                    <a href="{{ path('video_edit', {'id': video.id} ) }}">✏ </a>️
+                    <a href="{{ path('video_delete', {'id': video.id} ) }}">🗑️️</a>
+                </div>
+            {% endif %}
+
+            <div class="card-body"> </div> {# card-body #}
+        </div> {# col #}
+    </div> {# card #}
+{% endfor %}

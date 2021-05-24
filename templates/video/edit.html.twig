@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Video{% endblock %}
+
+{% block body %}
+
+    <div class="container p-2">
+        <div class="row">
+            <div class="mx-auto">
+                <div class="col-sm">
+
+                    <div class="card" style="border: white;">
+                        <iframe width="560" height="315" src=" {{ video.url }} "
+                                title="YouTube video player"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen>
+                        </iframe>
+                        <div class="card-body">
+
+
+                            {{ form_start(form) }}
+                            {{ form_row(form.url) }}
+
+                            <button type="submit" class="btn btn-success btn-lg col-12"><i class="fas fa-check"></i>
+                                UPDATE VIDEO
+                            </button>
+
+                            {{ form_end(form) }}
+                        </div> {# card-body #}
+                    </div> {# card #}
+
+                </div> {# col-sm #}
+            </div> {# mx-auto #}
+        </div> {# row #}
+    </div> {# container #}
+
+{% endblock %}

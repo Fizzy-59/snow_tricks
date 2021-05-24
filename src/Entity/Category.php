@@ -6,9 +6,11 @@ use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=CategoryRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class Category
 {
@@ -21,6 +23,8 @@ class Category
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Assert\Length(max=30, maxMessage="The name must not be more than 30 characters")
+     * @Assert\Length(min=3, minMessage="The name must be at least 3 characters long")
      */
     private $name;
 
@@ -30,14 +34,18 @@ class Category
     private $tricks;
 
     /**
-     * @ORM\OneToMany(targetEntity=User::class, mappedBy="category")
+     * @ORM\Column(type="datetime")
      */
-    private $users;
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $updatedAt;
 
     public function __construct()
     {
         $this->tricks = new ArrayCollection();
-        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -87,33 +95,31 @@ class Category
         return $this;
     }
 
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+
     /**
-     * @return Collection|User[]
+     * @ORM\PrePersist
      */
-    public function getUsers(): Collection
+    public function setCreatedAt(): void
     {
-        return $this->users;
+        $this->createdAt =  $this->createdAt = new \DateTimeImmutable();
     }
 
-    public function addUser(User $user): self
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
-        if (!$this->users->contains($user)) {
-            $this->users[] = $user;
-            $user->setCategory($this);
-        }
-
-        return $this;
+        return $this->updatedAt;
     }
 
-    public function removeUser(User $user): self
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function setUpdatedAt(): void
     {
-        if ($this->users->removeElement($user)) {
-            // set the owning side to null (unless already changed)
-            if ($user->getCategory() === $this) {
-                $user->setCategory(null);
-            }
-        }
-
-        return $this;
+        $this->updatedAt =  $this->createdAt = new \DateTimeImmutable();
     }
 }

@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Trick{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+
+    {# MAIN IMAGE #}
+    {% include 'trick/main-image.html.twig' %}
+
+    <div class="row">
+        {# IMAGES #}
+        {% include'trick/images.html.twig' %}
+
+
+        {# VIDEOS #}
+        {% include 'trick/videos.html.twig' %}
+    </div> {# row #}
+
+    <div class="row">
+        <p>{{ trick.description }}</p>
+    </div> {# row #}
+
+    <div class="row">
+
+        <div class="col">
+            <div class="card">
+                <div class="card-body text-center">
+                    {{ trick.category.name }}
+                </div> {# card-body #}
+            </div> {# card #}
+        </div> {# col #}
+
+        <div class="col">
+            <div class="card">
+                <div class="card-body text-center">
+                    {{ trick.createdAt|date('d-m-Y  H:i') }}
+                </div> {# card-body #}
+            </div> {# card #}
+        </div> {# col #}
+
+        {% if trick.createdAt != trick.updatedAt %}
+            <div class="col">
+                <div class="card">
+                    <div class="card-body text-center">
+                        {{ trick.updatedAt|date('d-m-Y  H:i') }}
+                    </div> {# card-body #}
+                </div> {# card #}
+            </div> {# col #}
+        {% endif %}
+
+    </div> {# row #}
+
+    {# Comment #}
+    {% include 'trick/comment.html.twig' %}
+
+    {% if trick.comments.count > 0 %}
+    <div class="row">
+        <a class="mx-auto" href="{{ path('trick_load_more', {'id': trick.id }) }}">
+            <button type="button" class="btn btn-info">Load More</button>
+        </a>
+    {% endif %}
+
+    </div>
+
+    </div>{# container #}
+
+{% endblock %}

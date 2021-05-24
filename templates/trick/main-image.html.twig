@@ -1,0 +1,27 @@
+<div class="row p-4">
+    <div class="col">
+
+        <div class="card-top">
+
+            {% if app.user %}
+                <div class="actions">
+                    <a href="{{ path('main_image_edit', {'id': trick.mainImage.id} ) }}">✏ </a>️
+                    <a href="{{ path('main_image_delete', {'id': trick.mainImage.id} ) }}"
+                       onclick="return confirm('are u sure?')">🗑️️</a>
+                </div>
+            {% endif %}
+
+            <img src="{{ asset(trick.mainImage.pathThumbnail ~ '/' ~ trick.mainImage.name) }}"
+                 class="card-img-top" alt="{{ trick.mainImage.caption }}">
+        </div> {# card-top #}
+
+        <div class="card-body">
+
+            <div class="text-block">
+                <h4>{{ trick.name }}</h4>
+            </div>
+
+        </div> {# card-body #}
+    </div> {# col #}
+</div> {# row #}
+<hr>

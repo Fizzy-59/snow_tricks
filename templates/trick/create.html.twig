@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create Trick{% endblock %}
+
+{% block body %}
+
+    {% include '/utils/script_multiple_add.html.twig' %}
+
+    <div class="container pb-2">
+        <div class="row">
+            <div class="mx-auto">
+                <div class="col-sm">
+
+                    <h1>Adding a new trick</h1>
+
+                    {{ form_start(form) }}
+
+                    {{ form_row(form.name) }}
+                    {{ form_row(form.description) }}
+                    {{ form_row(form.mainImage) }}
+
+                    {% include '/utils/add_mutiple_images_button.html.twig' %}
+                    {% include '/utils/add_mutiple_videos_button.html.twig' %}
+
+                    {{ form_row(form.category) }}
+
+                    <button class="btn btn-primary">Create Trick</button>
+                    {{ form_row(form._token) }}
+                    {{ form_end(form, {'render_rest': false}) }}
+
+                </div> {# col #}
+            </div> {# mx-auto #}
+        </div> {# row #}
+    </div> {# container #}
+
+{% endblock %}

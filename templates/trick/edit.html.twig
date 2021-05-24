@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SnowTricks - Editer un trick{% endblock %}
+
+
+{% block body %}
+
+    {% include '/utils/script_multiple_add.html.twig' %}
+
+    <div class="container pb-2">
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+
+        {# MAIN IMAGE #}
+        {% include 'trick/main-image.html.twig' %}
+
+        <div class="row">
+            {# IMAGES #}
+            {% include'trick/images.html.twig' %}
+
+
+            {# VIDEOS #}
+            {% include 'trick/videos.html.twig' %}
+        </div> {# row #}
+
+        <div class="row p-2">
+            <div class="col">
+                {% include 'utils/add_mutiple_images_button.html.twig' %}
+            </div>
+            <div class="col">
+                {% include 'utils/add_mutiple_videos_button.html.twig' %}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                {{ form_row(form.name) }}
+            </div> {# col #}
+        </div> {# row #}
+
+        <div class="row">
+            <div class="col">
+                {{ form_row(form.description) }}
+            </div>
+        </div> {# row #}
+
+        <div class="row">
+            <div class="col">
+                {{ form_row(form.category) }}
+            </div> {# col #}
+        </div> {# row #}
+
+        <div class="row">
+            <button type="submit" class="btn btn-success btn-lg col-8"><i class="fas fa-check"></i> UPDATE TRICK
+            </button>
+            <a class="col-4" href="{{ path('trick_delete', {'id': trick.id }) }}"
+               onclick="return confirm('are u sure?')">
+                <button type="" class="btn btn-danger btn-lg"><i class="fas fa-check"></i> DELETE TRICK
+                </button>
+            </a>
+        </div>
+
+        {{ form_row(form._token) }}
+        {{ form_end(form, {'render_rest': false}) }}
+    </div>
+{% endblock %}

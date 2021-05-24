@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=VideoRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class Video
 {
@@ -23,14 +24,19 @@ class Video
     private $url;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="videos")
-     */
-    private $users;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="videos")
      */
     private $trick;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $updatedAt;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
 
     public function getId(): ?int
     {
@@ -44,20 +50,18 @@ class Video
 
     public function setUrl(string $url): self
     {
-        $this->url = $url;
+        $shortUrlRegex = '/youtu.be\/([a-zA-Z0-9_-]+)\??/i';
+        $longUrlRegex = '/youtube.com\/((?:embed)|(?:watch))((?:\?v\=)|(?:\/))([a-zA-Z0-9_-]+)/i';
 
-        return $this;
-    }
+        if (preg_match($longUrlRegex, $url, $matches)) {
+            $youtube_id = $matches[count($matches) - 1];
+        }
 
-    public function getUsers(): ?User
-    {
-        return $this->users;
-    }
+        if (preg_match($shortUrlRegex, $url, $matches)) {
+            $youtube_id = $matches[count($matches) - 1];
+        }
 
-    public function setUsers(?User $users): self
-    {
-        $this->users = $users;
-
+        $this->url = 'https://www.youtube.com/embed/' . $youtube_id ;
         return $this;
     }
 
@@ -71,5 +75,32 @@ class Video
         $this->trick = $trick;
 
         return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function setUpdatedAt(): void
+    {
+        $this->updatedAt = $this->createdAt = new \DateTimeImmutable();
+    }
+
+    public function getCreadtedAt(): ?\DateTimeInterface
+    {
+        return $this->creadtedAt;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCreatedAt(): void
+    {
+        $this->createdAt = new \DateTimeImmutable();
     }
 }
