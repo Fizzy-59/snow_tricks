@@ -28,12 +28,12 @@
                              class="card-img-top" alt="{{ trick.mainImage.caption }}">
 
                         <div class="card-body">
-                            <a href="{{ path('trick', {'id': trick.id }) }}">
+                            <a href="{{ path('trick', {'slug': trick.slug }) }}">
                                 <p class="card-text">{{ trick.name }}
                             </a>
 
                             {% if app.user %}
-                                <a href="{{ path('trick_edit', {'id': trick.id }) }}">✏ </a>️
+                                <a href="{{ path('trick_edit', {'slug': trick.slug }) }}">✏ </a>️
                                 <a href="{{ path('trick_delete', {'id': trick.id }) }}"
                                    onclick="return confirm('are u sure?')">🗑️️</a>
                             {% endif %}

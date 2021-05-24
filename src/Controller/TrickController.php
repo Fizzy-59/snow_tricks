@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class TrickController extends AbstractController
 {
     /**
-     * @Route("/trick/{id}", name="trick", requirements={"id":"\d+"})
+     * @Route("/trick/{slug}", name="trick", requirements={"id":"\d+"})
      *
      * @param Trick $trick
      * @return Response
@@ -94,7 +94,7 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/trick/{id}/edit", name="trick_edit")
+     * @Route("/trick/{slug}/edit", name="trick_edit")
      *
      * @param Trick $trick
      * @param EntityManagerInterface $entityManager
