@@ -41,7 +41,7 @@ class Trick
     /**
      * @ORM\Column(type="text")
      * @Assert\Length(min=20, minMessage="Description must be at least 20 characters long")
-     * @Assert\Length(max=100, maxMessage="Description must not be more than 700 characters")
+     * @Assert\Length(max=4000, maxMessage="Description must not be more than 4000 characters")
      */
     private $description;
 
