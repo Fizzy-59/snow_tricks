@@ -1,43 +1,4 @@
-{% if app.user %}
-    <div class="row text-center">
-        <div class="col-lg-8 col-md-10 mx-auto">
-            <p>
-                <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button"
-                   aria-expanded="false" aria-controls="collapseExample">
-                    Add a comment </a>
-            </p>
-        </div>
-    </div> {# row #}
-    <hr>
-
-    {# Form  add comment #}
-    <div class="row">
-        <div class="col-lg-8 col-md-8 mx-auto">
-            <div class="collapse" id="collapseExample">
-                <div class="form-group">
-                    <form action="{{ path('add_comment') }}" method="post">
-                        <input class="col-lg-12 col-sm-12 " type="text" id="comment" name="comment" required
-                               minlength="3">
-
-                        {# Button send #}
-                        <div class="row">
-                            <div class="col text-center p-1">
-                                <input class="btn btn-primary" type="submit">
-                                <input type="hidden" name="trickId" value="{{ trick.id }}"/>
-                            </div> {# col #}
-                        </div> {# row #}
-
-                    </form>
-                </div> {# form-group #}
-            </div> {# colapse #}
-        </div> {# col #}
-    </div> {# row #}
-
-{% endif %}
-
-<br>
 {# Comment #}
-<div id="comments">
     {% for comment in comments %}
         <div class="row p-1">
 
@@ -47,7 +8,7 @@
                          style="height: 75px"
                          alt="profile picture of user">
 
-                 {# User din't have gravatar #}
+                    {# User din't have gravatar #}
                 {% else %}
                     <a href="{{ path('add_gravatar') }}">
                         <img src="https://i.imgur.com/yTFUilP.jpg"
@@ -78,6 +39,5 @@
 
         </div>
     {% endfor %}
-</div>
 
 

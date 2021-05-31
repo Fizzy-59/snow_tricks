@@ -57,10 +57,9 @@
 
     {% if trick.comments.count > 0 %}
     <div class="row">
-        <a class="mx-auto" href="{{ path('trick_load_more', {'id': trick.id }) }}">
-            <button type="button" class="btn btn-info">Load More</button>
-        </a>
-    {% endif %}
+        <a id="load-more" data-id="{{ trick.id }}" data-total="{{ totalPages }}" class="mx-auto btn btn-info" href="#">
+            Load More</a>
+        {% endif %}
 
     </div>
 

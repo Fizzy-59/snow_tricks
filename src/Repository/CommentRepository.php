@@ -22,28 +22,25 @@ class CommentRepository extends ServiceEntityRepository
 
     public function loadComments(int $offset, int $limit, Trick $trick)
     {
-        $qb = $this->createQueryBuilder('c')
+        return $this->createQueryBuilder('c')
             ->where('c.trick = :trick')
             ->setParameter('trick', $trick)
             ->orderBy('c.createdAt', 'DESC')
-            ->getQuery();
-
-        $qb->setFirstResult($offset)
-            ->setMaxResults($limit);
-
-        return $qb->getResult();
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
     }
 
-    public function loadMore(Trick $trick)
+    public function countTotalPages(Trick $trick)
     {
-        $qb = $this->createQueryBuilder('c')
+        $count = $this->createQueryBuilder('c')
+            ->select('count(c.id)')
             ->where('c.trick = :trick')
             ->setParameter('trick', $trick)
-            ->orderBy('c.createdAt', 'DESC')
-            ->getQuery();
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        return $qb->getResult();
+        return ceil($count/10);
     }
-
-
 }

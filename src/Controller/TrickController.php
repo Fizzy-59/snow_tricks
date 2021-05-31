@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Comment;
 use App\Entity\Trick;
 use App\Form\TrickType;
 use App\Repository\CommentRepository;
@@ -21,8 +20,7 @@ class TrickController extends AbstractController
      *
      * @param Request $request
      * @param EntityManagerInterface $entityManager
-     * @return
-     * Response
+     * @return Response
      */
     public function newTrick(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -50,49 +48,23 @@ class TrickController extends AbstractController
      * @Route("/trick/{slug}", name="trick", requirements={"id":"\d+"})
      *
      * @param Trick $trick
+     * @param CommentRepository $commentRepository
      * @return Response
      */
     public function showTrick(Trick $trick, CommentRepository $commentRepository): Response
     {
         $user = $this->getUser();
-        $comments = $commentRepository->loadComments(1, 10, $trick);
+        $comments = $commentRepository->loadComments(0, 10, $trick);
+        $totalPages = $commentRepository->countTotalPages($trick);
 
         return $this->render('trick/index.html.twig',
             [
                 'user' => $user,
                 'trick' => $trick,
-                'comments' => $comments
+                'comments' => $comments,
+                'totalPages' => $totalPages,
+                'currentPage' => 1
             ]);
-    }
-
-
-    /**
-     * @Route("/add-comment", name="add_comment")
-     *
-     * @param TrickRepository $trickRepository
-     * @param EntityManagerInterface $entityManager
-     * @param Request $request
-     * @return Response
-     */
-    public function addComment(TrickRepository $trickRepository, EntityManagerInterface $entityManager, Request $request): Response
-    {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-        $user = $this->getUser();
-
-        $request = $request->request->all();
-        $trickId = $request['trickId'];
-        $content = $request['comment'];
-
-        $trick = $trickRepository->findOneBy(['id' => $trickId]);
-
-        $comment = new Comment();
-        $trick->addComment($comment);
-        $comment->setContent($content);
-        $comment->setUser($user);
-        $entityManager->persist($comment);
-        $entityManager->flush();
-
-        return $this->redirect($this->generateUrl('trick', ['id' => $trick->getId()]));
     }
 
     /**
@@ -137,26 +109,6 @@ class TrickController extends AbstractController
 
         $tricks = $trickRepository->findAll();
         return $this->render('home_page/index.html.twig', ['tricks' => $tricks]);
-    }
-
-    /**
-     * @Route("/trick/{id}/load-more", name="trick_load_more", requirements={"id":"\d+"})
-     *
-     * @param Trick $trick
-     * @param CommentRepository $commentRepository
-     * @return Response
-     */
-    public function loadMore(Trick $trick, CommentRepository $commentRepository): Response
-    {
-        $user = $this->getUser();
-        $comments = $commentRepository->loadMore($trick);
-
-        return $this->render('trick/index.html.twig',
-            [
-                'user' => $user,
-                'trick' => $trick,
-                'comments' => $comments
-            ]);
     }
 }
 
