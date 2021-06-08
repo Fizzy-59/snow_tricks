@@ -147,7 +147,7 @@ class Trick
      */
     public function setUpdatedAt(): void
     {
-        $this->updatedAt = $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     public function getCategory(): ?Category
